@@ -1,0 +1,12 @@
+schema: "classroom50/repo-config/v1"
+classroom: "ds212"
+assignment: "portfolio"
+owner:
+  username: "ikimhor"
+  id: 326185370
+  accepted_at: "2026-09-08T00:06:51Z"
+source:
+  owner: "mac-ds212-f26"
+  owner_id: 323652586
+  repo: "portfolio-template"
+  branch: "main"
