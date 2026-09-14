@@ -185,7 +185,7 @@ If you'd like finer control of the width of these lines/rectangles, check out th
 
 ### Finer control
 
-```{r weather_plot_temp_all}
+```{r}
 ggplot(weather) + 
   geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = RecordLow, ymax = RecordHigh), fill = '#ECEBE3') +
   geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = NormalLow, ymax = NormalHigh), fill = '#C8B8BA') +
