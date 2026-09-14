@@ -151,9 +151,7 @@ Look at the [`geom_linerange` documentation page](https://ggplot2.tidyverse.org/
 
 ```{r weather_plot_temp_records}
 ggplot(weather) +
-  geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh)) +
-  geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh)) +
-  geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High)) +
+  geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +
   theme_classic()
 ```
 
@@ -165,10 +163,6 @@ As you work on this plot, try to use some new [keyboard shortcuts](https://hash-
 - Run current line/currently selected lines: `Ctrl+Enter` (Windows). `Command+Return` (Mac).
 :::
 
-
-
-
-
 ## Exercise 3
 
 In your visualization, also display the usual temperatures (`NormalLow` and `NormalHigh`) and actual 2011 temperatures (`Low` and `High`). Your plot should look like the one below. The hex code of the color used for the usual temperatures is `"#C8B8BA"` and for the color used for actual temperatures is `"#A90248"`.
@@ -176,7 +170,11 @@ In your visualization, also display the usual temperatures (`NormalLow` and `Nor
 ![SFO observed, Average, and Record Daily Temperatures in 2011](https://hash-mac.github.io/ds212site-f26/images/sfo_second_graph.png)
 
 ```{r weather_plot_temp_all}
-
+ggplot(weather) + 
+  geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +
+  geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +
+  geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248') +
+  theme_classic()
 
 ```
 
@@ -185,17 +183,33 @@ In your visualization, also display the usual temperatures (`NormalLow` and `Nor
 If you'd like finer control of the width of these lines/rectangles, check out the [`geom_rect` documentation page](https://ggplot2.tidyverse.org/reference/geom_tile.html).
 :::
 
+### Finer control
+
+```{r weather_plot_temp_all}
+ggplot(weather) + 
+  geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = RecordLow, ymax = RecordHigh), fill = '#ECEBE3') +
+  geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = NormalLow, ymax = NormalHigh), fill = '#C8B8BA') +
+  geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = Low, ymax = High), fill = '#A90248') +
+  theme_classic()
+
+# when I first ran without +-0.5, there wasn't anything on the plot, however to decide the width of the rectangles, I can make space or like temporal space so that I can actually see the x values being represented
+```
 
 ## Exercise 4
 
 Recreate the visual demarcations of the months by adding vertical lines separating the months.  Brainstorm how we might draw those vertical lines. What `geom` might we use?  What subset of the data might we use in that `geom` layer to draw lines only at the month divisions? 
 
 ```{r }
-
-
+ggplot(weather) + 
+  geom_linerange(aes(x = date, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +
+  geom_linerange(aes(x = date, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +
+  geom_linerange(aes(x = date, ymin = Low, ymax = High), color = '#A90248') + 
+  geom_vline(
+    data = subset(weather, Day == 1), # this took a while to figure out
+    aes(xintercept = date), 
+    linetype = "dotted", 
+    color = "grey")
 ```
-
-
 
 ## Exercise 5
 
@@ -205,6 +219,22 @@ Change the x-axis labels so that the month names display in the center of each m
 R has built-in variables called `month.abb` and `month.name` that contain abbreviated and full month names.
 :::
 
+```{r}
+ggplot(weather) + 
+  geom_linerange(aes(x = date, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +
+  geom_linerange(aes(x = date, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +
+  geom_linerange(aes(x = date, ymin = Low, ymax = High), color = '#A90248') + 
+  geom_vline(
+    data = subset(weather, Day == 1), # this took a while to figure out, so this will start a line every start of the month
+    aes(xintercept = date), 
+    linetype = "dotted", 
+    color = "grey") + 
+  scale_x_date(
+    breaks = subset(weather, Day == 15)$date, # give or take its in the middle
+    labels = month.abb)
+
+# found hte scale_x_date function within https://rstudio.github.io/cheatsheets/data-visualization.pdf
+```
 
 Try to figuring out this new challenge using search engines and LLMs:
 
@@ -225,8 +255,42 @@ Create a precipitation plot that looks like the following.  Note that
 
 
 ```{r weather_plot_precip}
+month_labels <- weather %>%
+  group_by(Month) %>%
+  filter(dateInYear == max(dateInYear))
 
+ggplot(weather, aes(x = dateInYear, y = CulmPrec)) +
+  
+  # 1. Add the tan filled area, grouped by month to create the gaps
+  geom_area(aes(group = Month), fill = "#ebeae2") +
+  
+  # 2. Add the blue line on top of the area
+  geom_line(aes(group = Month), color = "#32a3d8") +
+  
+  # 3. Add the downward-pointing triangles for records
+  # We filter the data inline to only plot points where RecordP is TRUE
+  geom_point(data = filter(weather, RecordP == TRUE), 
+             shape = 25,        # Shape 25 is a downward-pointing triangle
+             fill = "black", 
+             size = 2) +
+  
+  # 4. Add the total precipitation numbers
+  # Using the subset we created earlier so we don't plot text on every single day
+  geom_text(data = month_labels, 
+            aes(label = CulmPrec),
+            vjust = -0.5,          # Moves text slightly above the line
+            hjust = 0.5,           # Centers the text horizontally
+            size = 3.5) +
+  
+  # 5. Apply a clean theme to remove gridlines and match the image
+  theme_classic() +
+  labs(x = "dateInYear", y = "CulmPrec")
 ```
+
+Breaking Down Prompt and Output from Gemini
+  - **Prompt** : "Can you guide me and complete the code in R, to recreate this plot with these instructions:  - The triangles point to precipitation records--refer to the data codebook above for the `RecordP` variable.  - The numbers on the plot indicate the total precipitation for the month--search the `hjust` and `vjust` options to adjust the alignment of the numbers.  - The blue and tan colors hex codes are `"#32a3d8"` and `"#ebeae2"`, respectively.    using ggplot2 library"
+  - **Output** : geom_area is new for me, but I understsand as it creates a density plot looking graph where it fills in the space in between the line and the x axis with the fill parameter. Furthermore, geom_text is new for me, but it seems intuitive enough as in being able to adjust the position of it. Gemini also data wrangled the data before hand, so that only the lastest of every every month row is available in a subset dataframe. Overall understandable, but if I was to do this myself would take some time working through documentations and trial/error with the parameters.
+
 ## Done!
 
 - Check the ICA Instructions for how to (a) push your code to GitHub and (b) update your portfolio website
