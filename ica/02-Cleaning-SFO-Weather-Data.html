@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
-<title>ICA Sample 2 – COMP/STAT212 Portfolio</title>
+<title>2 Cleaning SFO Weather Data – COMP/STAT212 Portfolio</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -60,7 +57,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
-
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -84,8 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-aa768d0510026dbab67ce2f8e698749f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../site_libs/bootstrap/bootstrap-dark-ce494e159dae1eb1aeb2beb157b73888.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-aa768d0510026dbab67ce2f8e698749f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-aa768d0510026dbab67ce2f8e698749f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -111,9 +106,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-
-<script type="text/javascript" charset="UTF-8">
+}</script><script type="text/javascript" charset="UTF-8">
 document.addEventListener('DOMContentLoaded', function () {
 cookieconsent.run({
   "notice_banner_type":"simple",
@@ -128,14 +121,9 @@ cookieconsent.run({
 "language":"en"
   });
 });
-</script> 
-  
-<style>html{ scroll-behavior: smooth; }</style>
-
-
+</script><style>html{ scroll-behavior: smooth; }</style>
 <link rel="stylesheet" href="../style/custom.css">
 </head>
-
 <body class="nav-sidebar docked quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
@@ -301,30 +289,22 @@ cookieconsent.run({
   </script>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ica/ica-sample1.html">In-Class Activities</a></li><li class="breadcrumb-item"><a href="../ica/ica-sample2.html"><span class="chapter-title">ICA Sample 2</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ica/ica-sample1.html">In-Class Activities</a></li><li class="breadcrumb-item"><a href="../ica/02-Cleaning-SFO-Weather-Data.html"><span class="chapter-title">2 Cleaning SFO Weather Data</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../assets/sidebar-logo.png" alt="Random negative space illustration" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="../assets/sidebar-logo.png" alt="Random negative space illustration" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
-      </a>
+      <img src="../assets/sidebar-logo.png" alt="Random negative space illustration" class="sidebar-logo light-content py-0 d-lg-inline d-none"><img src="../assets/sidebar-logo.png" alt="Random negative space illustration" class="sidebar-logo dark-content py-0 d-lg-inline d-none"></a>
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Ikareach Kimhor</a> 
         <div class="sidebar-tools-main">
@@ -344,7 +324,7 @@ cookieconsent.run({
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Welcome</span></a>
   </div>
@@ -357,14 +337,14 @@ cookieconsent.run({
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pvj/pvj-01.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Personal Visualization Journey</span></a>
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
@@ -373,8 +353,8 @@ cookieconsent.run({
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../tt/2025-07-08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">TidyTuesday Sample 1</span></a>
   </div>
@@ -385,7 +365,7 @@ cookieconsent.run({
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
@@ -394,14 +374,14 @@ cookieconsent.run({
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pcl/pcl.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Pre-Class Learning Summaries</span></a>
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
@@ -410,15 +390,15 @@ cookieconsent.run({
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ica/ica-sample1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ICA Sample 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../ica/ica-sample2.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">ICA Sample 2</span></a>
+  <a href="../ica/02-Cleaning-SFO-Weather-Data.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">2 Cleaning SFO Weather Data</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -427,7 +407,7 @@ cookieconsent.run({
   </div>
 </li>
       </ul>
-  </li>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
@@ -436,8 +416,8 @@ cookieconsent.run({
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../extra/extra-sample1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Extra Sample 1</span></a>
   </div>
@@ -448,27 +428,26 @@ cookieconsent.run({
   </div>
 </li>
       </ul>
-  </li>
+</li>
     </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li><a href="#exercise" id="toc-exercise" class="nav-link active" data-scroll-target="#exercise">Exercise</a></li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content column-page-right" id="quarto-document-content">
-
-
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ica/ica-sample1.html">In-Class Activities</a></li><li class="breadcrumb-item"><a href="../ica/ica-sample2.html"><span class="chapter-title">ICA Sample 2</span></a></li></ol></nav>
-<div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-title">ICA Sample 2</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<main class="content column-body" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ica/ica-sample1.html">In-Class Activities</a></li><li class="breadcrumb-item"><a href="../ica/02-Cleaning-SFO-Weather-Data.html"><span class="chapter-title">2 Cleaning SFO Weather Data</span></a></li></ol></nav><div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-title">2 Cleaning SFO Weather Data</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
 
-<div class="quarto-title-meta column-page-right">
+<div class="quarto-title-meta column-body">
 
     
   
@@ -477,17 +456,115 @@ cookieconsent.run({
   
 
 
-</header>
-
-
-<p>Add content here</p>
+</header><div class="callout callout-style-default callout-note callout-titled" title="Helpful Data Wrangling Notes">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Helpful Data Wrangling Notes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>
+<code>month.abb</code> is a built-in object in R with 3-letter month abbreviations</li>
+<li>You can create your own data frame with the <code>tibble()</code> function. Look up the documentation for this function by typing <code><a href="https://tibble.tidyverse.org/reference/tibble.html">?tibble::tibble</a></code> in the Console.</li>
+<li>You can create regular sequences in R with <code>:</code>, eg, <code>3:5</code> generates the sequence <code>c(3, 4, 5)</code>.</li>
+<li>You can create regular sequences in R with <code><a href="https://rdrr.io/r/base/seq.html">seq()</a></code>, eg, <code>seq(from = 3, to = 5, by = 1)</code> generates the sequence <code>c(3, 4, 5)</code>. Look up the documentation for this function by typing <code><a href="https://rdrr.io/r/base/seq.html">?seq</a></code> in the Console.</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled" title="Practicing Keyboard Shortcuts">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Practicing Keyboard Shortcuts
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Try out the following as you work on this exercise:</p>
+<ul>
+<li>Tab completion (Try this out when writing your file paths! Typing out a partial path will pull up a mini file-explorer)</li>
+<li>Insert a code chunk</li>
+<li>Run a code chunk</li>
+<li>Navigating around words and lines (selecting and deleting them)</li>
+<li>Run selected lines (not a whole code chunk)</li>
+<li>Insert the assignment operator (<code>&lt;-</code>)</li>
+<li>Insert the pipe operator (<code>|&gt;</code>)</li>
+</ul>
+</div>
+</div>
+<section id="exercise" class="level2"><h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
+<p>Carryout the following steps to clean and save the San Francisco Weather data. Make sure to download and add the data file to your portfolio repository as instructed.</p>
+<ol type="1">
+<li>Read in the weather data in this file with the correct relative file path after you move it to the instructed location.</li>
+<li>There is a variable that has values that don’t make sense in the data context. Figure out which variable this is and clean it up by making those values missing using <code>na_if()</code>.</li>
+<li>Create a variable called <code>dateInYear</code> that indicates the day of the year (1-365) for each case. (Jan 1 should be 1, and Dec 31 should be 365).</li>
+<li>Create a variable called <code>month_name</code> that shows the 3-letter abbreviation for each case.</li>
+<li>Save the wrangled data to the <code>data/processed/</code> folder using <code>write_csv()</code>. Name this file <code>weather_clean.csv</code>. Look up the documentation for this function by typing <code>?write_csv</code> in the Console. You’ll need to write an appropriate relative path.</li>
+</ol>
+<p>Step 1</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span> (tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>weather <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'data/raw/weather.csv'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Step 2</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>weather_clean <span class="ot">&lt;-</span> weather <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="fu">mutate</span>(<span class="at">PrecipYr =</span> <span class="fu">na_if</span>(PrecipYr, <span class="dv">99999</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Step 3</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>weather_clean <span class="ot">&lt;-</span> weather_clean <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="fu">mutate</span>(<span class="at">dateInYear =</span> <span class="fu">yday</span>(<span class="fu">mdy</span>(date))) <span class="co"># this turns the year into months (count) then months to day (count)</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="fu">print</span> (weather_clean<span class="sc">$</span>dateInYear)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>  [1] 324 167 129 299 270 187 307  85 277 330 263 329  79 213  37 105 217 165
+ [19] 290  89 289 340 326 356  42 111  20  44  70 121  40 172  25 248 198  39
+ [37] 298 280 160  14 130  45  22 206 230 193 104 255 319 103  13 296 349 176
+ [55] 279 110  84  29 141 252 221 108  33 365 149 287 102 145 118 107  64 224
+ [73] 316  51 305 347 138 363 282 143 285 170  48 204  24 181 214 225 163  43
+ [91]   1 308  78 116 233  61  86 310  49 242 246 247 239 219 135 344 339 292
+[109]  53 144 211 100 325 283  65 338 293 350 124  77 218  98 194  19  17 162
+[127] 203  31 357  99 174 147  75  16 335   9  50  92 122 152 345 207 327 364
+[145] 348 140 126 343 272 232  15 253 251 195 201 362 241 127 133  41 304 159
+[163] 117  72  36 267 322 157 295 288 257 106 185  88 355 212 210 229  80  30
+[181]  93 311 202 262 273 164 168 291 183 313 254 113 336  73  27 199 215  38
+[199]  62 134 132  35 125 236 265 332  71 153 238 351  28 222 148 274 208 341
+[217]  60 155 328 331  12 320 360 250 244  26 303 178 191 269 281 156 205 169
+[235] 245  82  97  96 177 190  56 243 249 300  91 314 188 334 259 359 101 256
+[253] 271   2   3 179 223 278 158  55  69 228 234 166 276  81 275  90 302  83
+[271] 312  23  68 286 173  57  52 317  34 180  74 337 301 342 200 154 139 136
+[289]  11 315 119 128 231  87 114 237 333 268 196 323 260 258 266 353 346   4
+[307]  76 240 297 182   5 150 142 123  94 226 361 318 321 175  46 137  66 284
+[325] 115  63  18 235 171 306  32 146 209 264  95 197 227 309 109  47  21 189
+[343] 294 151  67 131   7  59 186 112   6 216 261  58 354 184   8 120 161  54
+[361] 192 352 220 358  10</code></pre>
+</div>
+</div>
+<p>Step 4</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>weather_clean <span class="ot">&lt;-</span> weather_clean <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">mutate</span> (<span class="at">month_name =</span> <span class="fu">month</span>(Month, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">TRUE</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Step 5</p>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">write_csv</span>(weather_clean, <span class="at">file =</span> <span class="st">"data/processed/weather_clean.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
 
 
 <!-- -->
 
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
     if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
@@ -955,9 +1032,7 @@ cookieconsent.run({
       }
     }
   });
-  </script>
-<nav class="page-navigation column-page-right">
-  <div class="nav-page nav-page-previous">
+  </script><nav class="page-navigation column-body"><div class="nav-page nav-page-previous">
       <a href="../ica/ica-sample1.html" class="pagination-link" aria-label="ICA Sample 1">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">ICA Sample 1</span></span>
       </a>          
@@ -968,15 +1043,74 @@ cookieconsent.run({
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="an">title:</span><span class="co"> "ICA Sample 2"</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co">---</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a>Add content here</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">---</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="an">title:</span><span class="co"> "2 Cleaning SFO Weather Data"</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">---</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a>::: {.callout-note title="Helpful Data Wrangling Notes"}</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="ss">- </span><span class="in">`month.abb`</span> is a built-in object in R with 3-letter month abbreviations</span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="ss">- </span>You can create your own data frame with the <span class="in">`tibble()`</span> function. Look up the documentation for this function by typing <span class="in">`?tibble::tibble`</span> in the Console.</span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="ss">- </span>You can create regular sequences in R with <span class="in">`:`</span>, eg, <span class="in">`3:5`</span> generates the sequence <span class="in">`c(3, 4, 5)`</span>.</span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="ss">- </span>You can create regular sequences in R with <span class="in">`seq()`</span>, eg, <span class="in">`seq(from = 3, to = 5, by = 1)`</span> generates the sequence <span class="in">`c(3, 4, 5)`</span>.  Look up the documentation for this function by typing <span class="in">`?seq`</span> in the Console.</span>
+<span id="cb7-10"><a href="#cb7-10"></a>:::</span>
+<span id="cb7-11"><a href="#cb7-11"></a></span>
+<span id="cb7-12"><a href="#cb7-12"></a>::: {.callout-important title="Practicing Keyboard Shortcuts"}</span>
+<span id="cb7-13"><a href="#cb7-13"></a>Try out the following as you work on this exercise:</span>
+<span id="cb7-14"><a href="#cb7-14"></a></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="ss">- </span>Tab completion (Try this out when writing your file paths! Typing out a partial path will pull up a mini file-explorer)</span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="ss">- </span>Insert a code chunk</span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="ss">- </span>Run a code chunk</span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="ss">- </span>Navigating around words and lines (selecting and deleting them)</span>
+<span id="cb7-19"><a href="#cb7-19"></a><span class="ss">- </span>Run selected lines (not a whole code chunk)</span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="ss">- </span>Insert the assignment operator (<span class="in">`&lt;-`</span>)</span>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="ss">- </span>Insert the pipe operator (<span class="in">`|&gt;`</span>)</span>
+<span id="cb7-22"><a href="#cb7-22"></a>:::</span>
+<span id="cb7-23"><a href="#cb7-23"></a></span>
+<span id="cb7-24"><a href="#cb7-24"></a><span class="fu">## Exercise</span></span>
+<span id="cb7-25"><a href="#cb7-25"></a></span>
+<span id="cb7-26"><a href="#cb7-26"></a>Carryout the following steps to clean and save the San Francisco Weather data.  Make sure to download and add the data file to your portfolio repository as instructed.</span>
+<span id="cb7-27"><a href="#cb7-27"></a></span>
+<span id="cb7-28"><a href="#cb7-28"></a><span class="ss">1. </span>Read in the weather data in this file with the correct relative file path after you move it to the instructed location.</span>
+<span id="cb7-29"><a href="#cb7-29"></a><span class="ss">2. </span>There is a variable that has values that don't make sense in the data context. Figure out which variable this is and clean it up by making those values missing using <span class="in">`na_if()`</span>.</span>
+<span id="cb7-30"><a href="#cb7-30"></a><span class="ss">3. </span>Create a variable called <span class="in">`dateInYear`</span> that indicates the day of the year (1-365) for each case. (Jan 1 should be 1, and Dec 31 should be 365).</span>
+<span id="cb7-31"><a href="#cb7-31"></a><span class="ss">4. </span>Create a variable called <span class="in">`month_name`</span> that shows the 3-letter abbreviation for each case.</span>
+<span id="cb7-32"><a href="#cb7-32"></a><span class="ss">5. </span>Save the wrangled data to the <span class="in">`data/processed/`</span> folder using <span class="in">`write_csv()`</span>. Name this file <span class="in">`weather_clean.csv`</span>. Look up the documentation for this function by typing <span class="in">`?write_csv`</span> in the Console. You'll need to write an appropriate relative path.</span>
+<span id="cb7-33"><a href="#cb7-33"></a></span>
+<span id="cb7-34"><a href="#cb7-34"></a>Step 1</span>
+<span id="cb7-37"><a href="#cb7-37"></a><span class="in">```{r}</span></span>
+<span id="cb7-38"><a href="#cb7-38"></a><span class="fu">library</span> (tidyverse)</span>
+<span id="cb7-39"><a href="#cb7-39"></a></span>
+<span id="cb7-40"><a href="#cb7-40"></a>weather <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'data/raw/weather.csv'</span>)</span>
+<span id="cb7-41"><a href="#cb7-41"></a><span class="in">```</span></span>
+<span id="cb7-42"><a href="#cb7-42"></a></span>
+<span id="cb7-43"><a href="#cb7-43"></a>Step 2</span>
+<span id="cb7-44"><a href="#cb7-44"></a><span class="in">``` {r}</span></span>
+<span id="cb7-45"><a href="#cb7-45"></a>weather_clean <span class="ot">&lt;-</span> weather <span class="sc">%&gt;%</span></span>
+<span id="cb7-46"><a href="#cb7-46"></a>    <span class="fu">mutate</span>(<span class="at">PrecipYr =</span> <span class="fu">na_if</span>(PrecipYr, <span class="dv">99999</span>))</span>
+<span id="cb7-47"><a href="#cb7-47"></a><span class="in">```</span></span>
+<span id="cb7-48"><a href="#cb7-48"></a></span>
+<span id="cb7-49"><a href="#cb7-49"></a>Step 3</span>
+<span id="cb7-50"><a href="#cb7-50"></a><span class="in">``` {r}</span></span>
+<span id="cb7-51"><a href="#cb7-51"></a>weather_clean <span class="ot">&lt;-</span> weather_clean <span class="sc">%&gt;%</span></span>
+<span id="cb7-52"><a href="#cb7-52"></a>    <span class="fu">mutate</span>(<span class="at">dateInYear =</span> <span class="fu">yday</span>(<span class="fu">mdy</span>(date))) <span class="co"># this turns the year into months (count) then months to day (count)</span></span>
+<span id="cb7-53"><a href="#cb7-53"></a></span>
+<span id="cb7-54"><a href="#cb7-54"></a><span class="fu">print</span> (weather_clean<span class="sc">$</span>dateInYear)</span>
+<span id="cb7-55"><a href="#cb7-55"></a><span class="in">```</span></span>
+<span id="cb7-56"><a href="#cb7-56"></a></span>
+<span id="cb7-57"><a href="#cb7-57"></a>Step 4</span>
+<span id="cb7-58"><a href="#cb7-58"></a><span class="in">``` {r}</span></span>
+<span id="cb7-59"><a href="#cb7-59"></a>weather_clean <span class="ot">&lt;-</span> weather_clean <span class="sc">%&gt;%</span></span>
+<span id="cb7-60"><a href="#cb7-60"></a>  <span class="fu">mutate</span> (<span class="at">month_name =</span> <span class="fu">month</span>(Month, <span class="at">label =</span> <span class="cn">TRUE</span>, <span class="at">abbr =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-61"><a href="#cb7-61"></a><span class="in">```</span></span>
+<span id="cb7-62"><a href="#cb7-62"></a></span>
+<span id="cb7-63"><a href="#cb7-63"></a>Step 5</span>
+<span id="cb7-64"><a href="#cb7-64"></a><span class="in">``` {r}</span></span>
+<span id="cb7-65"><a href="#cb7-65"></a><span class="fu">write_csv</span>(weather_clean, <span class="at">file =</span> <span class="st">"data/processed/weather_clean.csv"</span>)</span>
+<span id="cb7-66"><a href="#cb7-66"></a><span class="in">```</span></span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">
       &nbsp;
     </div>   
@@ -988,8 +1122,6 @@ cookieconsent.run({
     </div>
   </div>
 </footer>
-
-
 
 
 <script src="../site_libs/quarto-html/zenscroll-min.js"></script>

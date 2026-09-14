@@ -76,14 +76,25 @@
     ]
   },
   {
-    "objectID": "ica/ica-sample2.html",
-    "href": "ica/ica-sample2.html",
-    "title": "ICA Sample 2",
+    "objectID": "ica/02-Cleaning-SFO-Weather-Data.html",
+    "href": "ica/02-Cleaning-SFO-Weather-Data.html",
+    "title": "2 Cleaning SFO Weather Data",
     "section": "",
-    "text": "Add content here",
+    "text": "Exercise\nCarryout the following steps to clean and save the San Francisco Weather data. Make sure to download and add the data file to your portfolio repository as instructed.\nStep 1\nCodelibrary (tidyverse)\n\nweather &lt;- read.csv('data/raw/weather.csv')\nStep 2\nCodeweather_clean &lt;- weather %&gt;%\n    mutate(PrecipYr = na_if(PrecipYr, 99999))\nStep 3\nCodeweather_clean &lt;- weather_clean %&gt;%\n    mutate(dateInYear = yday(mdy(date))) # this turns the year into months (count) then months to day (count)\n\nprint (weather_clean$dateInYear)\n\n  [1] 324 167 129 299 270 187 307  85 277 330 263 329  79 213  37 105 217 165\n [19] 290  89 289 340 326 356  42 111  20  44  70 121  40 172  25 248 198  39\n [37] 298 280 160  14 130  45  22 206 230 193 104 255 319 103  13 296 349 176\n [55] 279 110  84  29 141 252 221 108  33 365 149 287 102 145 118 107  64 224\n [73] 316  51 305 347 138 363 282 143 285 170  48 204  24 181 214 225 163  43\n [91]   1 308  78 116 233  61  86 310  49 242 246 247 239 219 135 344 339 292\n[109]  53 144 211 100 325 283  65 338 293 350 124  77 218  98 194  19  17 162\n[127] 203  31 357  99 174 147  75  16 335   9  50  92 122 152 345 207 327 364\n[145] 348 140 126 343 272 232  15 253 251 195 201 362 241 127 133  41 304 159\n[163] 117  72  36 267 322 157 295 288 257 106 185  88 355 212 210 229  80  30\n[181]  93 311 202 262 273 164 168 291 183 313 254 113 336  73  27 199 215  38\n[199]  62 134 132  35 125 236 265 332  71 153 238 351  28 222 148 274 208 341\n[217]  60 155 328 331  12 320 360 250 244  26 303 178 191 269 281 156 205 169\n[235] 245  82  97  96 177 190  56 243 249 300  91 314 188 334 259 359 101 256\n[253] 271   2   3 179 223 278 158  55  69 228 234 166 276  81 275  90 302  83\n[271] 312  23  68 286 173  57  52 317  34 180  74 337 301 342 200 154 139 136\n[289]  11 315 119 128 231  87 114 237 333 268 196 323 260 258 266 353 346   4\n[307]  76 240 297 182   5 150 142 123  94 226 361 318 321 175  46 137  66 284\n[325] 115  63  18 235 171 306  32 146 209 264  95 197 227 309 109  47  21 189\n[343] 294 151  67 131   7  59 186 112   6 216 261  58 354 184   8 120 161  54\n[361] 192 352 220 358  10\nStep 4\nCodeweather_clean &lt;- weather_clean %&gt;%\n  mutate (month_name = month(Month, label = TRUE, abbr = TRUE))\nStep 5\nCodewrite_csv(weather_clean, file = \"data/processed/weather_clean.csv\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>ICA Sample 2</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>2 Cleaning SFO Weather Data</span>"
+    ]
+  },
+  {
+    "objectID": "ica/02-Cleaning-SFO-Weather-Data.html#exercise",
+    "href": "ica/02-Cleaning-SFO-Weather-Data.html#exercise",
+    "title": "2 Cleaning SFO Weather Data",
+    "section": "",
+    "text": "Read in the weather data in this file with the correct relative file path after you move it to the instructed location.\nThere is a variable that has values that don’t make sense in the data context. Figure out which variable this is and clean it up by making those values missing using na_if().\nCreate a variable called dateInYear that indicates the day of the year (1-365) for each case. (Jan 1 should be 1, and Dec 31 should be 365).\nCreate a variable called month_name that shows the 3-letter abbreviation for each case.\nSave the wrangled data to the data/processed/ folder using write_csv(). Name this file weather_clean.csv. Look up the documentation for this function by typing ?write_csv in the Console. You’ll need to write an appropriate relative path.",
+    "crumbs": [
+      "In-Class Activities",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>2 Cleaning SFO Weather Data</span>"
     ]
   },
   {
