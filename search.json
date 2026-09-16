@@ -43,6 +43,193 @@
     ]
   },
   {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html",
+    "title": "HW00 P2",
+    "section": "",
+    "text": "Libraries and Data\nCode# loading the necessary library for analysis\nlibrary (tidyverse)\n\n# loading tidytuesday data (The Languages of the World)\nendangered_status &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-12-23/endangered_status.csv')\nfamilies &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-12-23/families.csv')\nlanguages &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-12-23/languages.csv')\n\nprint (\"This data is taken from the github repository of rfordatascience under the tidytuesday repo... src:https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-12-23/readme.md\")\n\n[1] \"This data is taken from the github repository of rfordatascience under the tidytuesday repo... src:https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-12-23/readme.md\"",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#data-wrangling",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#data-wrangling",
+    "title": "HW00 P2",
+    "section": "Data Wrangling",
+    "text": "Data Wrangling\n\nCode# combining via \"id\" endangered_status and languages to get the corresponding countries\nlibrary(dplyr)\n\nendangered_language &lt;- languages %&gt;%\n  left_join(endangered_status, by = \"id\")",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#preliminary-exploration-and-simple-viz",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#preliminary-exploration-and-simple-viz",
+    "title": "HW00 P2",
+    "section": "Preliminary Exploration and Simple Viz",
+    "text": "Preliminary Exploration and Simple Viz\n\nCode# initial research questions\nprint (\"Which region holds the most concentration of endangered language, and what that tells us about multilingual countries?\")\n\n[1] \"Which region holds the most concentration of endangered language, and what that tells us about multilingual countries?\"\n\nCode# Understanding the endangered data\nendangered_status %&gt;% \n  group_by(status_label) %&gt;%\n  summarize (total = n())\n\n# A tibble: 6 × 2\n  status_label   total\n  &lt;chr&gt;          &lt;int&gt;\n1 extinct         1341\n2 moribund         461\n3 nearly extinct   353\n4 not endangered  2791\n5 shifting        1933\n6 threatened      1688\n\nCodeprint (\"There are significantly more non endangered language compared to problematic** languages around the world\")\n\n[1] \"There are significantly more non endangered language compared to problematic** languages around the world\"\n\nCode# Counting problematic** languages\nendangered_language %&gt;% \n  filter(!status_label == \"not endangered\") %&gt;%\n  ggplot(aes(x = status_label)) +\n  geom_bar(fill = \"hotpink\") +\n  labs(\n    title = \"Endangered Languages Globally\",\n    subtitle = \"Endangered languages\",\n    x = \"Endangerment Status\",\n    y = \"Number of Languages\",\n    caption = \"Data Source: TidyTuesday\") +\n  theme_minimal()\n\n\n\n\n\n\nCodeprint (\"However we have lost or at risks of loosing almost more than 4 times than we are maintaining all the languages of the world\")\n\n[1] \"However we have lost or at risks of loosing almost more than 4 times than we are maintaining all the languages of the world\"\n\nCodeprint (\"Transitioned to asking a simpler question: With countries that are have more concentration of languages would be better at preserving their languages, or does having more langauges be a problem instead.\")\n\n[1] \"Transitioned to asking a simpler question: With countries that are have more concentration of languages would be better at preserving their languages, or does having more langauges be a problem instead.\"",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#refined-rq",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#refined-rq",
+    "title": "HW00 P2",
+    "section": "Refined RQ",
+    "text": "Refined RQ\n\nCodeprint (\"Is there a correlation between a country's total linguistic diversity (number of languages spoken) and the proportion of its languages that are endangered?\")\n\n[1] \"Is there a correlation between a country's total linguistic diversity (number of languages spoken) and the proportion of its languages that are endangered?\"",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#more-simple-viz",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#more-simple-viz",
+    "title": "HW00 P2",
+    "section": "More Simple Viz",
+    "text": "More Simple Viz\n\nCode# Understanding each countries placement on a scatterplot, so how many languages they have in total proportion to the amount of endangered languages\ncountry_summary &lt;- endangered_language %&gt;%\n  group_by(countries) %&gt;%\n  summarize(\n    total_languages = n(),\n    endangered_count = sum(status_label != \"not endangered\")) %&gt;% \n  filter (total_languages &lt; 150)\n\nggplot(country_summary, aes(x = total_languages, y = endangered_count)) +\n  geom_point(alpha = 0.6, color = \"hotpink\", size = 2) + \n  geom_smooth(method = \"lm\", color = \"gold\", se = FALSE) + \n  theme_minimal() +\n  labs(\n    title = \"Linguistic Diversity vs. Endangerment by Country\",\n    subtitle = \"Comparing overall language counts to the volume of endangered languages\",\n    x = \"Total Languages Spoken in Country (Capped at 150)\",\n    y = \"Number of Endangered Languages\",\n    caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\nCodecountry_summary %&gt;%\n  arrange(desc(endangered_count)) %&gt;%\n  slice_head(n = 2)\n\n# A tibble: 2 × 3\n  countries total_languages endangered_count\n  &lt;chr&gt;               &lt;int&gt;            &lt;int&gt;\n1 PE                     97               89\n2 MY                     82               75\n\nCodeprint (\"Initial view of graph shows that there are two countries with higher proportion of endangered languages to total languages. This being Peru and Malaysia.\")\n\n[1] \"Initial view of graph shows that there are two countries with higher proportion of endangered languages to total languages. This being Peru and Malaysia.\"\n\nCodeprint(\"Initial plot also shows an absurd 1000 languages, with no visible dot (country) that exists past 100 endangered languages and 1000 total languages, so it was decided to cut the total languages spoken at 150. Graph shows that: There's a strong concentration of countries with less than 25 total languages, as well as less than 25 endangered languages, with the linear trend line being a strong positive, more or less proportional to each other.\")\n\n[1] \"Initial plot also shows an absurd 1000 languages, with no visible dot (country) that exists past 100 endangered languages and 1000 total languages, so it was decided to cut the total languages spoken at 150. Graph shows that: There's a strong concentration of countries with less than 25 total languages, as well as less than 25 endangered languages, with the linear trend line being a strong positive, more or less proportional to each other.\"\n\nCodeprint (\"This means that most of these countries which the more multilingual they are, the more proportion of their total is classified as endangered. Furthermore, there's a fanning effect from the concentration at around 10 endangered/total languages showing that the predictability of endangered worsens. Overall however, this simply means that the more language a country harbors, doesn't necessarily mean they're able to keep all of it alive and healthy.\")\n\n[1] \"This means that most of these countries which the more multilingual they are, the more proportion of their total is classified as endangered. Furthermore, there's a fanning effect from the concentration at around 10 endangered/total languages showing that the predictability of endangered worsens. Overall however, this simply means that the more language a country harbors, doesn't necessarily mean they're able to keep all of it alive and healthy.\"",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#lat-and-long-map",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#lat-and-long-map",
+    "title": "HW00 P2",
+    "section": "Lat and Long map",
+    "text": "Lat and Long map\n\nCode# combined dataframe have lat and long data, so I thought this was fitting\nendangered_only &lt;- endangered_language %&gt;%\n  filter(!status_code %in% c(1, 6)) %&gt;% # keep only those at risk\n  filter (!is.na(status_label))\n\nworld_map &lt;- map_data(\"world\")\n\nggplot() +\n  geom_polygon(\n    data = world_map, \n    aes(x = long, y = lat, group = group), \n    fill = \"lightgrey\",\n    color = \"black\", \n    linewidth = 0.2) +\n  geom_point(\n    data = endangered_only, \n    aes(x = longitude, y = latitude, color = status_label), \n    alpha = 0.5, \n    size = 0.5) +\n  facet_wrap(~status_label) +\n  scale_color_viridis_d() +\n  theme_void() + # for a blank background\n  labs(\n    title = \"Global Distribution of Languages by Endangerment Status\",\n    subtitle = \"Mapping at-risk languages across different vulnerability levels\",\n    caption = \"Data Source: TidyTuesday\",\n    color = \"Status Label\")\n\n\n\n\n\n\nCodeprint (\"This is a build on of simple viz, where we can now spatially see where each of the endangered status is located globally. While there seems to be an equal distribution within type (threatened and shifting), we can also see that there's more a slight higher concentration in Asia for moribound (near death). There seems to be a concentration of nearly extinct languages in Australia and the North West of America showing that they're on the brink of extinction. While the regions with high diversity, they are all suceptible to the pressure of modernization and globalization, where in theory people are giving up their own unique mothertongue for globalized languages like English, Chinese, Spanish etc,. \")\n\n[1] \"This is a build on of simple viz, where we can now spatially see where each of the endangered status is located globally. While there seems to be an equal distribution within type (threatened and shifting), we can also see that there's more a slight higher concentration in Asia for moribound (near death). There seems to be a concentration of nearly extinct languages in Australia and the North West of America showing that they're on the brink of extinction. While the regions with high diversity, they are all suceptible to the pressure of modernization and globalization, where in theory people are giving up their own unique mothertongue for globalized languages like English, Chinese, Spanish etc,. \"",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#conclusion",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#conclusion",
+    "title": "HW00 P2",
+    "section": "Conclusion",
+    "text": "Conclusion\n\nCodeprint (\"Through the exploration of this research question (correlation between diversity of language in a country and endangered languages), I have found that there's a strong linear proportion of endangered languages to the total number of languages harbored in a particular country. Most of these so called extreme endangered languages are concentrated in Asia, Australia, and North West America. Therefore, for future research in to the reasons why, specualtions have been made such as globalization and shifting language usage around the world. Minority groups and their respective unique languages are being abandoned for prefferable languages in the modern age, that may provide more opportunities for jobs, education and even simply living.\")\n\n[1] \"Through the exploration of this research question (correlation between diversity of language in a country and endangered languages), I have found that there's a strong linear proportion of endangered languages to the total number of languages harbored in a particular country. Most of these so called extreme endangered languages are concentrated in Asia, Australia, and North West America. Therefore, for future research in to the reasons why, specualtions have been made such as globalization and shifting language usage around the world. Minority groups and their respective unique languages are being abandoned for prefferable languages in the modern age, that may provide more opportunities for jobs, education and even simply living.\"",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html",
+    "title": "HW00 P2",
+    "section": "",
+    "text": "Loading library and Dataset\nCodelibrary (tidytuesdayR)\nlibrary (tidyverse)\nlibrary (lmtest)\n\ncappuccino_index_initial &lt;- tidytuesdayR::tt_load('2026-09-08')",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#data-wrangling",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#data-wrangling",
+    "title": "HW00 P2",
+    "section": "Data Wrangling",
+    "text": "Data Wrangling\n\nCodecafe_data &lt;- cappuccino_index_initial$cafe\ncappuccino_data &lt;- cappuccino_index_initial$cappuccino_index\n\ncappuccino_index &lt;- cafe_data %&gt;%\n  left_join(cappuccino_data, by = \"country\")",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#initial-exploration---first-viz",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#initial-exploration---first-viz",
+    "title": "HW00 P2",
+    "section": "Initial Exploration - First Viz",
+    "text": "Initial Exploration - First Viz\n\nCode# First Graph to see the correlation\ncappuccino_index %&gt;% \n  ggplot(aes(x = hourly_wage_gbp, y = price_gbp)) +\n  geom_point(alpha = 0.5, color = \"hotpink\") +\n  theme_minimal() +\n  geom_smooth(method = \"lm\", color = \"gold\") +\n  labs(\n    title = \"Does the price of cappuccinos go up as wages increase?\",\n    subtitle = \"Comparing average hourly wage against cappuccino prices\",\n    x = \"Average Hourly Wage (GBP)\",\n    y = \"Average Cappuccino Price (GBP)\",\n    caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\nCode# Verifying Correlation\ncor (cappuccino_index$price_gbp, cappuccino_index$hourly_wage_gbp)\n\n[1] 0.4766038\n\nCodesummary(lm(price_gbp ~ hourly_wage_gbp, data = cappuccino_index))\n\n\nCall:\nlm(formula = price_gbp ~ hourly_wage_gbp, data = cappuccino_index)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-2.5587 -0.4064  0.0200  0.3962  6.7446 \n\nCoefficients:\n                Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)     2.413137   0.037788   63.86   &lt;2e-16 ***\nhourly_wage_gbp 0.085805   0.003109   27.60   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.7248 on 2592 degrees of freedom\nMultiple R-squared:  0.2272,    Adjusted R-squared:  0.2269 \nF-statistic: 761.8 on 1 and 2592 DF,  p-value: &lt; 2.2e-16\n\n\nInitial view of the \"joined\" dataset signals my interest in the variables : price_gbp, hourly_wage, and city. While I want to explore spatial graphs, I find it problematic that there are no coordinates (long, lat) for me to use.\n\nThe first graph was to see whether the increase in wages is proportional to the increase in the price of a cappuccino. Although it's a moderately positive relationship (r ~ 0.477), which indicates that on average, the price of cappuccinos increases with the hourly wage per country. \n\nThen I ran a linear model to explore further. With only these two variables, we can see that, for each country, the average price of a single cappuccino doesn't depend on how much people earn per hour in that country (r^2 = 0.2269). Therefore,, there must be other drivers in this dataset that explain why the average value of a single cup of cappuccino is increasing or decreasing.",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#research-question",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#research-question",
+    "title": "HW00 P2",
+    "section": "Research Question",
+    "text": "Research Question\nHow does local hourly wage relate to cappuccino prices?",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#second-viz",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#second-viz",
+    "title": "HW00 P2",
+    "section": "Second Viz",
+    "text": "Second Viz\nThere's a column that distinguishes among urban, suburban, and rural. Therefore, using these characteristics as drivers of price, I want to see which region experiences the largest increase in cappuccino prices.\n\nCodeindex_pivot &lt;- cappuccino_index %&gt;%\n  pivot_longer(\n    cols = c(urban, suburban, rural), \n    names_to = \"area\",\n    values_to = \"is_present\") %&gt;%\n  filter (is_present == TRUE) %&gt;%\n  select(-is_present)\n\n# pivot longer so that I can get one singular column to work with for facet wrapping\n\nindex_pivot %&gt;%\n  ggplot (aes(x = area, y = price_gbp, fill = area)) + \n  geom_boxplot(alpha = 0.5) + \n  theme_minimal() + \n  scale_fill_viridis_d() + # color blind options\n  labs(title = \"Cappuccino Prices by Area Type\",\n       subtitle = \"Does the area in which you're in determine how much your coffee costs?\",\n       x = \"Area Type\",\n       y = \"Price\",\n       caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\n\nFrom afar, the boxplots seem to indicate little difference between the prices. However, if we scrutinize this, rural areas show the lowest and tightest distributions: lower prices on average, as well as less price variability from the minimum to the maximum a cup of coffee can go for. So there's more stable pricing. \n\nSuburban areas show more variability without reaching the highs of urban areas, with a steeper low than rural areas, indicating there's more competition among coffee prices. \n\nWhat's noticeable about the urban areas is their extreme outliers. This can indicate tourist areas, trends, and even really cheap places. Attributions to higher disposable income can also be explored!",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#are-the-areas-significantly-different-in-prices",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#are-the-areas-significantly-different-in-prices",
+    "title": "HW00 P2",
+    "section": "Are the areas significantly different in prices?",
+    "text": "Are the areas significantly different in prices?\n\nCodecappuccino_anova &lt;- aov(price_gbp ~ area, data = index_pivot)\nsummary(cappuccino_anova)\n\n              Df Sum Sq Mean Sq F value Pr(&gt;F)\narea           2    1.6  0.8166   1.205    0.3\nResiduals   2656 1799.9  0.6777               \n\n\nPrices don't statistically differ significantly from areas to areas. Even with the extreme outliers.",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#third-viz",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#third-viz",
+    "title": "HW00 P2",
+    "section": "Third Viz",
+    "text": "Third Viz\n\nCodecappuccino_index %&gt;%\n  ggplot(aes(x = minutes)) +\n  geom_histogram(fill = \"hotpink\", alpha = 0.5, bins = 40) +\n  theme_minimal() +\n  labs(title = \"Minutes of Work Needed to Buy a Cappuccino\",\n       x = \"Minutes of Work\",\n       y = \"Count of Cities\", \n       caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\nCode# this plot seems to have few extreme outliers, in which we will identify first then filter out to get a clearer picture\n\nindex_filtered_high &lt;- cappuccino_index %&gt;%\n  filter (minutes &gt; 100) %&gt;%\n  count (country)\nindex_filtered_high\n\n# A tibble: 10 × 2\n   country         n\n   &lt;chr&gt;       &lt;int&gt;\n 1 Djibouti        1\n 2 Egypt           1\n 3 India          11\n 4 Nicaragua       1\n 5 Oman            3\n 6 Pakistan        2\n 7 Philippines    11\n 8 Qatar           1\n 9 Sri Lanka       1\n10 Vietnam         6\n\nCodeindex_filtered_low &lt;- cappuccino_index %&gt;%\n  filter (minutes &lt; 100)\n\nindex_filtered_low %&gt;%\n  ggplot(aes(x = minutes)) +\n  geom_density(fill = \"hotpink\", alpha = 0.5) +\n  theme_minimal() +\n  labs(title = \"Distribution of Minutes of Work per Cappuccino\",\n       x = \"Minutes of Work\",\n       y = \"Density\", \n       caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\n\nThe initial view of this graph shows that there are extreme hours that people in some countries work to obtain a cup of cappuccino. These countries include: Djibouti, Egypt, India, Nicaragua, Oman, Pakistan, the Philippines, Qatar, Sri Lanka, and Vietnam. (Some of these countries don't make sense to me, as these are known to be either producers of beans or oil-rich nations. So I decided to filter out those under 100 minutes. This should give a clearer picture of the density in which people work.\n\nMost people work for about 15 minutes just to afford a cup of cappuccino.\n\nHowever, if there are such extreme hours worked, could there also be extreme prices?",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#forth-viz",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#forth-viz",
+    "title": "HW00 P2",
+    "section": "Forth Viz",
+    "text": "Forth Viz\n\nCodemean_price &lt;- mean(cappuccino_index$price, na.rm = TRUE)\n\ncappuccino_index %&gt;%\n  mutate(reliability = ifelse(n &lt; 10, \"Small Sample (&lt;10)\", \"Adequate Sample\")) %&gt;%\n  ggplot(aes(x = n, y = price, color = reliability)) +\n  geom_point(alpha = 0.5, size = 2) +\n  geom_hline(yintercept = mean_price, linetype = \"dashed\", color = \"hotpink\") +\n  theme_minimal() +\n  labs(\n    title = \"Extreme price estimates are driven by small sample sizes\",\n    subtitle = \"Dashed line shows the global average.\",\n    x = \"Number of Cafés Sampled per City (n)\",\n    y = \"Average Cappuccino Price (GBP)\",\n    caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\n\nMost of the extreme outliers are attributable to the small sample sizes. Therefore, we can simply say that, because some cities have fewer than 10 samples, the correlation is unreliable. It is not fair to say that hourly wage is a good/bad predictor of the price of a cup of cappuccino simply because some cities have more cafes sampled than others.",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#confirmation-of-variations",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#confirmation-of-variations",
+    "title": "HW00 P2",
+    "section": "Confirmation of variations",
+    "text": "Confirmation of variations\n\nCodevariability_model &lt;- lm(price ~ n, data = cappuccino_index)\nbptest(variability_model)\n\n\n    studentized Breusch-Pagan test\n\ndata:  variability_model\nBP = 11.772, df = 1, p-value = 0.0006014\n\n\nIf I were to use a simple linear model and summary, it would test the mean instead of the variance. We want to know whether small-sample-size cities are more likely to have extreme prices. Therefore, I did some googling and found out about bptest. The output p-value = 0.0006014 indicates that the variance is not constant in our dataset, and the spread of cappuccino prices is dependent on how many cafes were sampled.",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#conclusion",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#conclusion",
+    "title": "HW00 P2",
+    "section": "Conclusion",
+    "text": "Conclusion\nTo answer the research question: How does local hourly wage relate to cappuccino prices? We understand that the price of a cappuccino increases with the local hourly wage (in GBP); however, if that were the case, we would expect the hourly wage across different areas to differ as well. Viz Two, however, shows that there's no significant difference in cappuccino prices between the three areas. Furthermore, in Viz Three, most people spend about the same amount of time to afford a cup of cappuccino (10-15 minutes), with a few extreme outliers. This is consistent with the trends from Viz One, where if the time to afford a cup of cappuccino is relatively constant, then the hourly wage must also increase proportionally. We also understand that wage is not the only driving factor, and that much less than intuition would suggest, coupled with the reasons for those extreme outliers being a small sample size from different cities.",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
     "objectID": "pcl/pcl.html",
     "href": "pcl/pcl.html",
     "title": "Pre-Class Learning Summaries",
@@ -50,7 +237,7 @@
     "text": "R",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -61,7 +248,7 @@
     "text": "Quarto\n\n\n\nfrom qmd4sci.njtierney.com",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -72,7 +259,7 @@
     "text": "Add content here",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>ICA Sample 1</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>ICA Sample 1</span>"
     ]
   },
   {
@@ -83,7 +270,7 @@
     "text": "Exercise\nCarryout the following steps to clean and save the San Francisco Weather data. Make sure to download and add the data file to your portfolio repository as instructed.\nStep 1\nCodelibrary (tidyverse)\n\nweather &lt;- read.csv('data/raw/weather.csv')\nStep 2\nCodeweather_clean &lt;- weather %&gt;%\n    mutate(PrecipYr = na_if(PrecipYr, 99999))\nStep 3\nCodeweather_clean &lt;- weather_clean %&gt;%\n    mutate(dateInYear = yday(mdy(date))) # this turns the year into months (count) then months to day (count)\n\nprint (weather_clean$dateInYear)\n\n  [1] 324 167 129 299 270 187 307  85 277 330 263 329  79 213  37 105 217 165\n [19] 290  89 289 340 326 356  42 111  20  44  70 121  40 172  25 248 198  39\n [37] 298 280 160  14 130  45  22 206 230 193 104 255 319 103  13 296 349 176\n [55] 279 110  84  29 141 252 221 108  33 365 149 287 102 145 118 107  64 224\n [73] 316  51 305 347 138 363 282 143 285 170  48 204  24 181 214 225 163  43\n [91]   1 308  78 116 233  61  86 310  49 242 246 247 239 219 135 344 339 292\n[109]  53 144 211 100 325 283  65 338 293 350 124  77 218  98 194  19  17 162\n[127] 203  31 357  99 174 147  75  16 335   9  50  92 122 152 345 207 327 364\n[145] 348 140 126 343 272 232  15 253 251 195 201 362 241 127 133  41 304 159\n[163] 117  72  36 267 322 157 295 288 257 106 185  88 355 212 210 229  80  30\n[181]  93 311 202 262 273 164 168 291 183 313 254 113 336  73  27 199 215  38\n[199]  62 134 132  35 125 236 265 332  71 153 238 351  28 222 148 274 208 341\n[217]  60 155 328 331  12 320 360 250 244  26 303 178 191 269 281 156 205 169\n[235] 245  82  97  96 177 190  56 243 249 300  91 314 188 334 259 359 101 256\n[253] 271   2   3 179 223 278 158  55  69 228 234 166 276  81 275  90 302  83\n[271] 312  23  68 286 173  57  52 317  34 180  74 337 301 342 200 154 139 136\n[289]  11 315 119 128 231  87 114 237 333 268 196 323 260 258 266 353 346   4\n[307]  76 240 297 182   5 150 142 123  94 226 361 318 321 175  46 137  66 284\n[325] 115  63  18 235 171 306  32 146 209 264  95 197 227 309 109  47  21 189\n[343] 294 151  67 131   7  59 186 112   6 216 261  58 354 184   8 120 161  54\n[361] 192 352 220 358  10\nStep 4\nCodeweather_clean &lt;- weather_clean %&gt;%\n  mutate (month_name = month(Month, label = TRUE, abbr = TRUE))\nStep 5\nCodewrite_csv(weather_clean, file = \"data/processed/weather_clean.csv\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>2 Cleaning SFO Weather Data</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>2 Cleaning SFO Weather Data</span>"
     ]
   },
   {
@@ -94,7 +281,7 @@
     "text": "Read in the weather data in this file with the correct relative file path after you move it to the instructed location.\nThere is a variable that has values that don’t make sense in the data context. Figure out which variable this is and clean it up by making those values missing using na_if().\nCreate a variable called dateInYear that indicates the day of the year (1-365) for each case. (Jan 1 should be 1, and Dec 31 should be 365).\nCreate a variable called month_name that shows the 3-letter abbreviation for each case.\nSave the wrangled data to the data/processed/ folder using write_csv(). Name this file weather_clean.csv. Look up the documentation for this function by typing ?write_csv in the Console. You’ll need to write an appropriate relative path.",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>2 Cleaning SFO Weather Data</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>2 Cleaning SFO Weather Data</span>"
     ]
   },
   {
@@ -105,7 +292,7 @@
     "text": "🧩 Learning Goals\nBy the end of this lesson, you should be able to:",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -116,7 +303,7 @@
     "text": "Navigate ggplot2 reference page to find needed functions for a desired visualization\nNavigate the different sections of a function help page to construct desired plot features, in particular,\n\nNavigate the Usage section to identify arguments that must be set\nNavigate the Arguments section to understand how arguments work\nNavigate the Aesthetics section to learn how plot appearance can be controlled\nNavigate the Examples section for some usage examples\n\n\nIdentify when to use different data arguments within ggplot() and geom_() layers",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -127,7 +314,7 @@
     "text": "Introduction 1\n\nIn this lesson, we are going to recreate NYTimes 2015 Temperature Visualization (html) using data from San Francisco (SFO) in 2011.\n\n\nScreenshot of NYTimes 2015 Temperature Visualization",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -138,7 +325,7 @@
     "text": "Reading Data\nRun the code chunk below to load the tidyverse package and read in the San Francisco weather data.\n\nCodelibrary(tidyverse)\nweather &lt;- read_csv(\"https://mac-stat.github.io/data/sfo_weather.csv\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -149,7 +336,7 @@
     "text": "Understanding Data\nBelow is the codebook of the data. Familiarize yourself with the meaning of each variable. Use the codebook as a reference when using the data.\n\n\nMonth: Month of the year (1-12)\n\nDay: Day within the month (1-31)\n\nLow/High: Low/high temperature this day\n\nNormalLow/NormalHigh: Typical low/high temperature for this day of the year\n\nRecordLow/RecordHigh: Record low/high temperature for this day of the year\n\nLowYr/HighYr: Year in which the record low/high was observed\n\nPrecip: Amount of precipitation (inches) this day\n\nRecordPrecip: Record amount of precipitation for this day of the year\n\nPrecipYr: Year in which the record precipitation was observed\n\ndate: The actual date in 2011 for this day in YYYY-MM-DD format\n\ndateInYear: What day of the year is it? (1-365)\n\nRecord: Logical (TRUE/FALSE) indicating whether this day had a high temperature record\n\nRecordText: Text that displays the record high for this day (\"Record high: ##\")\n\nRecordP: Logical (TRUE/FALSE) indicating whether this day had a precipitation record\n\nCulmPrec: Cumulative precipitation for the month up to this day",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -160,7 +347,7 @@
     "text": "Exercise 1\nExamine the NYTimes 2015 Temperature Visualization (html) then answer the following questions.\nData Storytelling\n\n\nRelate the intro paragraph: “Scientists declared that 2015 was Earth’s hottest year on record…” to the design of the visualization. In particular, based on the intro paragraph,\n\nWhat key message/claim does NYTimes want readers to be able to explore?\n\nA culmination of temperature and weather data from 1981 to 2010, which is used to overlay against the temperature of 2015 data, showing a trend of increasingly warmer temperatures and extremer weather data.\n\nHow did this goal inform what information is displayed in the visualization?\n\nNYtimes is trying to demonstrate or use data visualization supporting the claim that they’re making that “2015-2016” is one of the hottest year recorded at the TIME. Furthermore, graphs are showing only certain statistics which is useful in proving that claim.\n\n\nAesthetic Mapping\n\n\nWhat specific variables (from the data codebook) underlie the visualization?\n\nTemperature (F/C) on the Y Axis\nMonths on the Y Axis\nGeom_bar pitted against negative + positive values\n\ndivided data through/ grouped data through shades/colors\n\n\nGeom_line for the precipitation\nGeom_polygon for the world map\nI think the codebook is represented well in the NYtimes graphs, like all of it\n\n\n\nHow do these variables map to aesthetics of the visual elements, eg, position, size, shape, and color of glyphs?\n\nNormal highs lows, Record highs lows, are represented through shade/fill, alpha?\nPosition not relative\nDotted lines to divide the months\nLabels are clear\nLegends\nSearch Bar for dataset selecting\nButton switching between Celsius and Fahrenheit",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -171,7 +358,7 @@
     "text": "Exercise 2\nNavigate the Geoms section of the ggplot2 reference page to find a geom that corresponds to the visual elements in the temperature plot. Using both the small thumbnail visuals on the right and the names of the geom’s, brainstorm some possibilities for geom’s you might use to recreate the temperature visualization.\n\ngeom_linerange\n\nusing layering or dodging (position)\n\n\ngeom_line for precipitation\n\n\n\n\n\n\n\nNoteNavigating Documentation / Reference Pages\n\n\n\nYou need to navigate the geoms further by opening up their reference pages to understand if a particular geom is suitable for our task. Let’s look at the geom_point documentation page to learn how to read a documentation page.\nThe Usage section shows all of the possible inputs (arguments) to the geom. These are all of the ways that a geom can be customized. Just looking at the argument names can help give a hint as to what arguments might fit our needs.\n\nmapping\ndata\nstat\nposition\n\nThe Arguments section, on the other hand, explains in detail what each argument does and the possible values the argument can take. The mapping, data, and ... arguments will be the most commonly used by far.\n\n\nmapping is the argument that is being used when we specify which variables should link or map to the plot aesthetics (the code inside aes()).\n\ndata is the argument where we specify the dataset containing the variables that the geom is using.\n\n... is used for fixed aesthetics (ones that don’t correspond to a variable), eg, to set the color of all points, we use color = \"red\" and to set the size of all points, we use size = 3.\n\nThe Aesthetics section of a geom documentation page gives information on how the visual elements of the geom correspond to data. For example, the geom_point documentation page shows that x and y aesthetics are available. It also shows some new aesthetics like stroke.\n\n\n\n\n\n\n\n\nNotedata Argument\n\n\n\nPreviously you have used one dataset per plot by specifying that as the first argument of ggplot(). However, multiple data sets can be passed into ggplot as shown in the example below.\n\nCodedata(diamonds)\n\ndiamonds_avg_price &lt;- diamonds |&gt;\n  group_by(carat) |&gt;\n  summarize(avg_price = mean(price)) |&gt;\n  arrange(carat)\ndiamonds_avg_price &lt;- diamonds_avg_price[seq(1, nrow(diamonds_avg_price), 3), ]\n\nggplot(diamonds, aes(x = carat, y = price)) +\n  geom_point() +\n  geom_point(\n    data = diamonds_avg_price,\n    aes(x = carat, y = avg_price),\n    color = \"deepskyblue\",\n    size = 3\n  )\n\n\n\n\n\n\n\n\n\nLook at the geom_linerange documentation page and start off your temperature visualization with the record lows and highs. Your plot should look like the one below. The hex code of the used light tan color is #ECEBE3.\n\n\nSFO Weather Records in 2011\n\n\nCodeggplot(weather) +\n  geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\n\n\nTipKeyboard Shortcuts\n\n\n\nAs you work on this plot, try to use some new keyboard shortcuts. Focus on the following:\n\nInsert code chunk: Ctrl+Alt+I (Windows). Option+Command+I (Mac).\nRun current code chunk: Ctrl+Shift+Enter (Windows). Command+Shift+Return (Mac).\nRun current line/currently selected lines: Ctrl+Enter (Windows). Command+Return (Mac).",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -182,7 +369,7 @@
     "text": "Exercise 3\nIn your visualization, also display the usual temperatures (NormalLow and NormalHigh) and actual 2011 temperatures (Low and High). Your plot should look like the one below. The hex code of the color used for the usual temperatures is \"#C8B8BA\" and for the color used for actual temperatures is \"#A90248\".\n\n\nSFO observed, Average, and Record Daily Temperatures in 2011\n\n\nCodeggplot(weather) + \n  geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +\n  geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +\n  geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248') +\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\n\n\nTipFiner Control\n\n\n\nIf you’d like finer control of the width of these lines/rectangles, check out the geom_rect documentation page.\n\n\nFiner control\n\nCodeggplot(weather) + \n  geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = RecordLow, ymax = RecordHigh), fill = '#ECEBE3') +\n  geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = NormalLow, ymax = NormalHigh), fill = '#C8B8BA') +\n  geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = Low, ymax = High), fill = '#A90248') +\n  theme_classic()\n\n\n\n\n\n\nCode# when I first ran without +-0.5, there wasn't anything on the plot, however to decide the width of the rectangles, I can make space or like temporal space so that I can actually see the x values being represented",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -193,7 +380,7 @@
     "text": "Exercise 4\nRecreate the visual demarcations of the months by adding vertical lines separating the months. Brainstorm how we might draw those vertical lines. What geom might we use? What subset of the data might we use in that geom layer to draw lines only at the month divisions?\n\nCodeggplot(weather) + \n  geom_linerange(aes(x = date, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +\n  geom_linerange(aes(x = date, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +\n  geom_linerange(aes(x = date, ymin = Low, ymax = High), color = '#A90248') + \n  geom_vline(\n    data = subset(weather, Day == 1), # this took a while to figure out\n    aes(xintercept = date), \n    linetype = \"dotted\", \n    color = \"grey\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -204,7 +391,7 @@
     "text": "Exercise 5\nChange the x-axis labels so that the month names display in the center of each month’s slice of the plot.\n\n\n\n\n\n\nTipMonth Names\n\n\n\nR has built-in variables called month.abb and month.name that contain abbreviated and full month names.\n\n\n\nCodeggplot(weather) + \n  geom_linerange(aes(x = date, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +\n  geom_linerange(aes(x = date, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +\n  geom_linerange(aes(x = date, ymin = Low, ymax = High), color = '#A90248') + \n  geom_vline(\n    data = subset(weather, Day == 1), # this took a while to figure out, so this will start a line every start of the month\n    aes(xintercept = date), \n    linetype = \"dotted\", \n    color = \"grey\") + \n  scale_x_date(\n    breaks = subset(weather, Day == 15)$date, # give or take its in the middle\n    labels = month.abb)\n\n\n\n\n\n\nCode# found hte scale_x_date function within https://rstudio.github.io/cheatsheets/data-visualization.pdf\n\n\nTry to figuring out this new challenge using search engines and LLMs:\n\nSearch Engines. Use Google to search for possible solutions using the jargon that is most likely to return the most relevant results. Record search queries and your thought process in selecting which search results to look at first.\nLLMs. Use ChatGPT or Gemini with prompts that will most efficiently get you the desired results. Record the chat prompts used and output given. Evaluate the output. Do you fully understand the code generated? How can you tell that the generated code is correct?",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -215,7 +402,7 @@
     "text": "Exercise 6\nCreate a precipitation plot that looks like the following. Note that\n\nThe triangles point to precipitation records–refer to the data codebook above for the RecordP variable.\nThe numbers on the plot indicate the total precipitation for the month–search the hjust and vjust options to adjust the alignment of the numbers.\nThe blue and tan colors hex codes are \"#32a3d8\" and \"#ebeae2\", respectively.\n\n\n\nSFO Precipitation in 2011\n\n\nCodemonth_labels &lt;- weather %&gt;%\n  group_by(Month) %&gt;%\n  filter(dateInYear == max(dateInYear))\n\nggplot(weather, aes(x = dateInYear, y = CulmPrec)) +\n  \n  # 1. Add the tan filled area, grouped by month to create the gaps\n  geom_area(aes(group = Month), fill = \"#ebeae2\") +\n  \n  # 2. Add the blue line on top of the area\n  geom_line(aes(group = Month), color = \"#32a3d8\") +\n  \n  # 3. Add the downward-pointing triangles for records\n  # We filter the data inline to only plot points where RecordP is TRUE\n  geom_point(data = filter(weather, RecordP == TRUE), \n             shape = 25,        # Shape 25 is a downward-pointing triangle\n             fill = \"black\", \n             size = 2) +\n  \n  # 4. Add the total precipitation numbers\n  # Using the subset we created earlier so we don't plot text on every single day\n  geom_text(data = month_labels, \n            aes(label = CulmPrec),\n            vjust = -0.5,          # Moves text slightly above the line\n            hjust = 0.5,           # Centers the text horizontally\n            size = 3.5) +\n  \n  # 5. Apply a clean theme to remove gridlines and match the image\n  theme_classic() +\n  labs(x = \"dateInYear\", y = \"CulmPrec\")\n\n\n\n\n\n\n\nBreaking Down Prompt and Output from Gemini - Prompt : “Can you guide me and complete the code in R, to recreate this plot with these instructions: - The triangles point to precipitation records–refer to the data codebook above for the RecordP variable. - The numbers on the plot indicate the total precipitation for the month–search the hjust and vjust options to adjust the alignment of the numbers. - The blue and tan colors hex codes are \"#32a3d8\" and \"#ebeae2\", respectively. using ggplot2 library” - Output : geom_area is new for me, but I understsand as it creates a density plot looking graph where it fills in the space in between the line and the x axis with the fill parameter. Furthermore, geom_text is new for me, but it seems intuitive enough as in being able to adjust the position of it. Gemini also data wrangled the data before hand, so that only the lastest of every every month row is available in a subset dataframe. Overall understandable, but if I was to do this myself would take some time working through documentations and trial/error with the parameters.",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -226,7 +413,7 @@
     "text": "Done!\n\nCheck the ICA Instructions for how to (a) push your code to GitHub and (b) update your portfolio website",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -237,194 +424,7 @@
     "text": "The exercise in this lesson are inspired by an assignment from the Concepts in Computing with Data course at UC Berkeley taught by Dr. Deborah Nolan.↩︎",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html",
-    "title": "HW00 P2",
-    "section": "",
-    "text": "Libraries and Data\nCode# loading the necessary library for analysis\nlibrary (tidyverse)\n\n# loading tidytuesday data (The Languages of the World)\nendangered_status &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-12-23/endangered_status.csv')\nfamilies &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-12-23/families.csv')\nlanguages &lt;- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2025/2025-12-23/languages.csv')\n\nprint (\"This data is taken from the github repository of rfordatascience under the tidytuesday repo... src:https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-12-23/readme.md\")\n\n[1] \"This data is taken from the github repository of rfordatascience under the tidytuesday repo... src:https://github.com/rfordatascience/tidytuesday/blob/main/data/2025/2025-12-23/readme.md\"",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#data-wrangling",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#data-wrangling",
-    "title": "HW00 P2",
-    "section": "Data Wrangling",
-    "text": "Data Wrangling\n\nCode# combining via \"id\" endangered_status and languages to get the corresponding countries\nlibrary(dplyr)\n\nendangered_language &lt;- languages %&gt;%\n  left_join(endangered_status, by = \"id\")",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#preliminary-exploration-and-simple-viz",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#preliminary-exploration-and-simple-viz",
-    "title": "HW00 P2",
-    "section": "Preliminary Exploration and Simple Viz",
-    "text": "Preliminary Exploration and Simple Viz\n\nCode# initial research questions\nprint (\"Which region holds the most concentration of endangered language, and what that tells us about multilingual countries?\")\n\n[1] \"Which region holds the most concentration of endangered language, and what that tells us about multilingual countries?\"\n\nCode# Understanding the endangered data\nendangered_status %&gt;% \n  group_by(status_label) %&gt;%\n  summarize (total = n())\n\n# A tibble: 6 × 2\n  status_label   total\n  &lt;chr&gt;          &lt;int&gt;\n1 extinct         1341\n2 moribund         461\n3 nearly extinct   353\n4 not endangered  2791\n5 shifting        1933\n6 threatened      1688\n\nCodeprint (\"There are significantly more non endangered language compared to problematic** languages around the world\")\n\n[1] \"There are significantly more non endangered language compared to problematic** languages around the world\"\n\nCode# Counting problematic** languages\nendangered_language %&gt;% \n  filter(!status_label == \"not endangered\") %&gt;%\n  ggplot(aes(x = status_label)) +\n  geom_bar(fill = \"hotpink\") +\n  labs(\n    title = \"Endangered Languages Globally\",\n    subtitle = \"Endangered languages\",\n    x = \"Endangerment Status\",\n    y = \"Number of Languages\",\n    caption = \"Data Source: TidyTuesday\") +\n  theme_minimal()\n\n\n\n\n\n\nCodeprint (\"However we have lost or at risks of loosing almost more than 4 times than we are maintaining all the languages of the world\")\n\n[1] \"However we have lost or at risks of loosing almost more than 4 times than we are maintaining all the languages of the world\"\n\nCodeprint (\"Transitioned to asking a simpler question: With countries that are have more concentration of languages would be better at preserving their languages, or does having more langauges be a problem instead.\")\n\n[1] \"Transitioned to asking a simpler question: With countries that are have more concentration of languages would be better at preserving their languages, or does having more langauges be a problem instead.\"",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#refined-rq",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#refined-rq",
-    "title": "HW00 P2",
-    "section": "Refined RQ",
-    "text": "Refined RQ\n\nCodeprint (\"Is there a correlation between a country's total linguistic diversity (number of languages spoken) and the proportion of its languages that are endangered?\")\n\n[1] \"Is there a correlation between a country's total linguistic diversity (number of languages spoken) and the proportion of its languages that are endangered?\"",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#more-simple-viz",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#more-simple-viz",
-    "title": "HW00 P2",
-    "section": "More Simple Viz",
-    "text": "More Simple Viz\n\nCode# Understanding each countries placement on a scatterplot, so how many languages they have in total proportion to the amount of endangered languages\ncountry_summary &lt;- endangered_language %&gt;%\n  group_by(countries) %&gt;%\n  summarize(\n    total_languages = n(),\n    endangered_count = sum(status_label != \"not endangered\")) %&gt;% \n  filter (total_languages &lt; 150)\n\nggplot(country_summary, aes(x = total_languages, y = endangered_count)) +\n  geom_point(alpha = 0.6, color = \"hotpink\", size = 2) + \n  geom_smooth(method = \"lm\", color = \"gold\", se = FALSE) + \n  theme_minimal() +\n  labs(\n    title = \"Linguistic Diversity vs. Endangerment by Country\",\n    subtitle = \"Comparing overall language counts to the volume of endangered languages\",\n    x = \"Total Languages Spoken in Country (Capped at 150)\",\n    y = \"Number of Endangered Languages\",\n    caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\nCodecountry_summary %&gt;%\n  arrange(desc(endangered_count)) %&gt;%\n  slice_head(n = 2)\n\n# A tibble: 2 × 3\n  countries total_languages endangered_count\n  &lt;chr&gt;               &lt;int&gt;            &lt;int&gt;\n1 PE                     97               89\n2 MY                     82               75\n\nCodeprint (\"Initial view of graph shows that there are two countries with higher proportion of endangered languages to total languages. This being Peru and Malaysia.\")\n\n[1] \"Initial view of graph shows that there are two countries with higher proportion of endangered languages to total languages. This being Peru and Malaysia.\"\n\nCodeprint(\"Initial plot also shows an absurd 1000 languages, with no visible dot (country) that exists past 100 endangered languages and 1000 total languages, so it was decided to cut the total languages spoken at 150. Graph shows that: There's a strong concentration of countries with less than 25 total languages, as well as less than 25 endangered languages, with the linear trend line being a strong positive, more or less proportional to each other.\")\n\n[1] \"Initial plot also shows an absurd 1000 languages, with no visible dot (country) that exists past 100 endangered languages and 1000 total languages, so it was decided to cut the total languages spoken at 150. Graph shows that: There's a strong concentration of countries with less than 25 total languages, as well as less than 25 endangered languages, with the linear trend line being a strong positive, more or less proportional to each other.\"\n\nCodeprint (\"This means that most of these countries which the more multilingual they are, the more proportion of their total is classified as endangered. Furthermore, there's a fanning effect from the concentration at around 10 endangered/total languages showing that the predictability of endangered worsens. Overall however, this simply means that the more language a country harbors, doesn't necessarily mean they're able to keep all of it alive and healthy.\")\n\n[1] \"This means that most of these countries which the more multilingual they are, the more proportion of their total is classified as endangered. Furthermore, there's a fanning effect from the concentration at around 10 endangered/total languages showing that the predictability of endangered worsens. Overall however, this simply means that the more language a country harbors, doesn't necessarily mean they're able to keep all of it alive and healthy.\"",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#lat-and-long-map",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#lat-and-long-map",
-    "title": "HW00 P2",
-    "section": "Lat and Long map",
-    "text": "Lat and Long map\n\nCode# combined dataframe have lat and long data, so I thought this was fitting\nendangered_only &lt;- endangered_language %&gt;%\n  filter(!status_code %in% c(1, 6)) %&gt;% # keep only those at risk\n  filter (!is.na(status_label))\n\nworld_map &lt;- map_data(\"world\")\n\nggplot() +\n  geom_polygon(\n    data = world_map, \n    aes(x = long, y = lat, group = group), \n    fill = \"lightgrey\",\n    color = \"black\", \n    linewidth = 0.2) +\n  geom_point(\n    data = endangered_only, \n    aes(x = longitude, y = latitude, color = status_label), \n    alpha = 0.5, \n    size = 0.5) +\n  facet_wrap(~status_label) +\n  scale_color_viridis_d() +\n  theme_void() + # for a blank background\n  labs(\n    title = \"Global Distribution of Languages by Endangerment Status\",\n    subtitle = \"Mapping at-risk languages across different vulnerability levels\",\n    caption = \"Data Source: TidyTuesday\",\n    color = \"Status Label\")\n\n\n\n\n\n\nCodeprint (\"This is a build on of simple viz, where we can now spatially see where each of the endangered status is located globally. While there seems to be an equal distribution within type (threatened and shifting), we can also see that there's more a slight higher concentration in Asia for moribound (near death). There seems to be a concentration of nearly extinct languages in Australia and the North West of America showing that they're on the brink of extinction. While the regions with high diversity, they are all suceptible to the pressure of modernization and globalization, where in theory people are giving up their own unique mothertongue for globalized languages like English, Chinese, Spanish etc,. \")\n\n[1] \"This is a build on of simple viz, where we can now spatially see where each of the endangered status is located globally. While there seems to be an equal distribution within type (threatened and shifting), we can also see that there's more a slight higher concentration in Asia for moribound (near death). There seems to be a concentration of nearly extinct languages in Australia and the North West of America showing that they're on the brink of extinction. While the regions with high diversity, they are all suceptible to the pressure of modernization and globalization, where in theory people are giving up their own unique mothertongue for globalized languages like English, Chinese, Spanish etc,. \"",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#conclusion",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.html#conclusion",
-    "title": "HW00 P2",
-    "section": "Conclusion",
-    "text": "Conclusion\n\nCodeprint (\"Through the exploration of this research question (correlation between diversity of language in a country and endangered languages), I have found that there's a strong linear proportion of endangered languages to the total number of languages harbored in a particular country. Most of these so called extreme endangered languages are concentrated in Asia, Australia, and North West America. Therefore, for future research in to the reasons why, specualtions have been made such as globalization and shifting language usage around the world. Minority groups and their respective unique languages are being abandoned for prefferable languages in the modern age, that may provide more opportunities for jobs, education and even simply living.\")\n\n[1] \"Through the exploration of this research question (correlation between diversity of language in a country and endangered languages), I have found that there's a strong linear proportion of endangered languages to the total number of languages harbored in a particular country. Most of these so called extreme endangered languages are concentrated in Asia, Australia, and North West America. Therefore, for future research in to the reasons why, specualtions have been made such as globalization and shifting language usage around the world. Minority groups and their respective unique languages are being abandoned for prefferable languages in the modern age, that may provide more opportunities for jobs, education and even simply living.\"",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html",
-    "title": "HW00 P2",
-    "section": "",
-    "text": "Loading library and Dataset\nCodelibrary (tidytuesdayR)\nlibrary (tidyverse)\nlibrary (lmtest)\n\ncappuccino_index_initial &lt;- tidytuesdayR::tt_load('2026-09-08')",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#data-wrangling",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#data-wrangling",
-    "title": "HW00 P2",
-    "section": "Data Wrangling",
-    "text": "Data Wrangling\n\nCodecafe_data &lt;- cappuccino_index_initial$cafe\ncappuccino_data &lt;- cappuccino_index_initial$cappuccino_index\n\ncappuccino_index &lt;- cafe_data %&gt;%\n  left_join(cappuccino_data, by = \"country\")",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#initial-exploration---first-viz",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#initial-exploration---first-viz",
-    "title": "HW00 P2",
-    "section": "Initial Exploration - First Viz",
-    "text": "Initial Exploration - First Viz\n\nCode# First Graph to see the correlation\ncappuccino_index %&gt;% \n  ggplot(aes(x = hourly_wage_gbp, y = price_gbp)) +\n  geom_point(alpha = 0.5, color = \"hotpink\") +\n  theme_minimal() +\n  geom_smooth(method = \"lm\", color = \"gold\") +\n  labs(\n    title = \"Does the price of cappuccinos go up as wages increase?\",\n    subtitle = \"Comparing average hourly wage against cappuccino prices\",\n    x = \"Average Hourly Wage (GBP)\",\n    y = \"Average Cappuccino Price (GBP)\",\n    caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\nCode# Verifying Correlation\ncor (cappuccino_index$price_gbp, cappuccino_index$hourly_wage_gbp)\n\n[1] 0.4766038\n\nCodesummary(lm(price_gbp ~ hourly_wage_gbp, data = cappuccino_index))\n\n\nCall:\nlm(formula = price_gbp ~ hourly_wage_gbp, data = cappuccino_index)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-2.5587 -0.4064  0.0200  0.3962  6.7446 \n\nCoefficients:\n                Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)     2.413137   0.037788   63.86   &lt;2e-16 ***\nhourly_wage_gbp 0.085805   0.003109   27.60   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.7248 on 2592 degrees of freedom\nMultiple R-squared:  0.2272,    Adjusted R-squared:  0.2269 \nF-statistic: 761.8 on 1 and 2592 DF,  p-value: &lt; 2.2e-16\n\n\nInitial view of the \"joined\" dataset signals my interest in the variables : price_gbp, hourly_wage, and city. While I want to explore spatial graphs, I find it problematic that there are no coordinates (long, lat) for me to use.\n\nThe first graph was to see whether the increase in wages is proportional to the increase in the price of a cappuccino. Although it's a moderately positive relationship (r ~ 0.477), which indicates that on average, the price of cappuccinos increases with the hourly wage per country. \n\nThen I ran a linear model to explore further. With only these two variables, we can see that, for each country, the average price of a single cappuccino doesn't depend on how much people earn per hour in that country (r^2 = 0.2269). Therefore,, there must be other drivers in this dataset that explain why the average value of a single cup of cappuccino is increasing or decreasing.",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#research-question",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#research-question",
-    "title": "HW00 P2",
-    "section": "Research Question",
-    "text": "Research Question\nHow does local hourly wage relate to cappuccino prices?",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#second-viz",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#second-viz",
-    "title": "HW00 P2",
-    "section": "Second Viz",
-    "text": "Second Viz\nThere's a column that distinguishes among urban, suburban, and rural. Therefore, using these characteristics as drivers of price, I want to see which region experiences the largest increase in cappuccino prices.\n\nCodeindex_pivot &lt;- cappuccino_index %&gt;%\n  pivot_longer(\n    cols = c(urban, suburban, rural), \n    names_to = \"area\",\n    values_to = \"is_present\") %&gt;%\n  filter (is_present == TRUE) %&gt;%\n  select(-is_present)\n\n# pivot longer so that I can get one singular column to work with for facet wrapping\n\nindex_pivot %&gt;%\n  ggplot (aes(x = area, y = price_gbp, fill = area)) + \n  geom_boxplot(alpha = 0.5) + \n  theme_minimal() + \n  scale_fill_viridis_d() + # color blind options\n  labs(title = \"Cappuccino Prices by Area Type\",\n       subtitle = \"Does the area in which you're in determine how much your coffee costs?\",\n       x = \"Area Type\",\n       y = \"Price\",\n       caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\n\nFrom afar, the boxplots seem to indicate little difference between the prices. However, if we scrutinize this, rural areas show the lowest and tightest distributions: lower prices on average, as well as less price variability from the minimum to the maximum a cup of coffee can go for. So there's more stable pricing. \n\nSuburban areas show more variability without reaching the highs of urban areas, with a steeper low than rural areas, indicating there's more competition among coffee prices. \n\nWhat's noticeable about the urban areas is their extreme outliers. This can indicate tourist areas, trends, and even really cheap places. Attributions to higher disposable income can also be explored!",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#are-the-areas-significantly-different-in-prices",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#are-the-areas-significantly-different-in-prices",
-    "title": "HW00 P2",
-    "section": "Are the areas significantly different in prices?",
-    "text": "Are the areas significantly different in prices?\n\nCodecappuccino_anova &lt;- aov(price_gbp ~ area, data = index_pivot)\nsummary(cappuccino_anova)\n\n              Df Sum Sq Mean Sq F value Pr(&gt;F)\narea           2    1.6  0.8166   1.205    0.3\nResiduals   2656 1799.9  0.6777               \n\n\nPrices don't statistically differ significantly from areas to areas. Even with the extreme outliers.",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#third-viz",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#third-viz",
-    "title": "HW00 P2",
-    "section": "Third Viz",
-    "text": "Third Viz\n\nCodecappuccino_index %&gt;%\n  ggplot(aes(x = minutes)) +\n  geom_histogram(fill = \"hotpink\", alpha = 0.5, bins = 40) +\n  theme_minimal() +\n  labs(title = \"Minutes of Work Needed to Buy a Cappuccino\",\n       x = \"Minutes of Work\",\n       y = \"Count of Cities\", \n       caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\nCode# this plot seems to have few extreme outliers, in which we will identify first then filter out to get a clearer picture\n\nindex_filtered_high &lt;- cappuccino_index %&gt;%\n  filter (minutes &gt; 100) %&gt;%\n  count (country)\nindex_filtered_high\n\n# A tibble: 10 × 2\n   country         n\n   &lt;chr&gt;       &lt;int&gt;\n 1 Djibouti        1\n 2 Egypt           1\n 3 India          11\n 4 Nicaragua       1\n 5 Oman            3\n 6 Pakistan        2\n 7 Philippines    11\n 8 Qatar           1\n 9 Sri Lanka       1\n10 Vietnam         6\n\nCodeindex_filtered_low &lt;- cappuccino_index %&gt;%\n  filter (minutes &lt; 100)\n\nindex_filtered_low %&gt;%\n  ggplot(aes(x = minutes)) +\n  geom_density(fill = \"hotpink\", alpha = 0.5) +\n  theme_minimal() +\n  labs(title = \"Distribution of Minutes of Work per Cappuccino\",\n       x = \"Minutes of Work\",\n       y = \"Density\", \n       caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\n\nThe initial view of this graph shows that there are extreme hours that people in some countries work to obtain a cup of cappuccino. These countries include: Djibouti, Egypt, India, Nicaragua, Oman, Pakistan, the Philippines, Qatar, Sri Lanka, and Vietnam. (Some of these countries don't make sense to me, as these are known to be either producers of beans or oil-rich nations. So I decided to filter out those under 100 minutes. This should give a clearer picture of the density in which people work.\n\nMost people work for about 15 minutes just to afford a cup of cappuccino.\n\nHowever, if there are such extreme hours worked, could there also be extreme prices?",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#forth-viz",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#forth-viz",
-    "title": "HW00 P2",
-    "section": "Forth Viz",
-    "text": "Forth Viz\n\nCodemean_price &lt;- mean(cappuccino_index$price, na.rm = TRUE)\n\ncappuccino_index %&gt;%\n  mutate(reliability = ifelse(n &lt; 10, \"Small Sample (&lt;10)\", \"Adequate Sample\")) %&gt;%\n  ggplot(aes(x = n, y = price, color = reliability)) +\n  geom_point(alpha = 0.5, size = 2) +\n  geom_hline(yintercept = mean_price, linetype = \"dashed\", color = \"hotpink\") +\n  theme_minimal() +\n  labs(\n    title = \"Extreme price estimates are driven by small sample sizes\",\n    subtitle = \"Dashed line shows the global average.\",\n    x = \"Number of Cafés Sampled per City (n)\",\n    y = \"Average Cappuccino Price (GBP)\",\n    caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\n\nMost of the extreme outliers are attributable to the small sample sizes. Therefore, we can simply say that, because some cities have fewer than 10 samples, the correlation is unreliable. It is not fair to say that hourly wage is a good/bad predictor of the price of a cup of cappuccino simply because some cities have more cafes sampled than others.",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#confirmation-of-variations",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#confirmation-of-variations",
-    "title": "HW00 P2",
-    "section": "Confirmation of variations",
-    "text": "Confirmation of variations\n\nCodevariability_model &lt;- lm(price ~ n, data = cappuccino_index)\nbptest(variability_model)\n\n\n    studentized Breusch-Pagan test\n\ndata:  variability_model\nBP = 11.772, df = 1, p-value = 0.0006014\n\n\nIf I were to use a simple linear model and summary, it would test the mean instead of the variance. We want to know whether small-sample-size cities are more likely to have extreme prices. Therefore, I did some googling and found out about bptest. The output p-value = 0.0006014 indicates that the variance is not constant in our dataset, and the spread of cappuccino prices is dependent on how many cafes were sampled.",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>HW00 P2</span>"
-    ]
-  },
-  {
-    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#conclusion",
-    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#conclusion",
-    "title": "HW00 P2",
-    "section": "Conclusion",
-    "text": "Conclusion\nTo answer the research question: How does local hourly wage relate to cappuccino prices? We understand that the price of a cappuccino increases with the local hourly wage (in GBP); however, if that were the case, we would expect the hourly wage across different areas to differ as well. Viz Two, however, shows that there's no significant difference in cappuccino prices between the three areas. Furthermore, in Viz Three, most people spend about the same amount of time to afford a cup of cappuccino (10-15 minutes), with a few extreme outliers. This is consistent with the trends from Viz One, where if the time to afford a cup of cappuccino is relatively constant, then the hourly wage must also increase proportionally. We also understand that wage is not the only driving factor, and that much less than intuition would suggest, coupled with the reasons for those extreme outliers being a small sample size from different cities.",
-    "crumbs": [
-      "Homeworks",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>HW00 P2</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
