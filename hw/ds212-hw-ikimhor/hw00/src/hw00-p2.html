@@ -4843,9 +4843,9 @@ box-shadow: 40px 0 100px #008cff85, -40px 0 100px #e100ffbb ;
   <ul>
 <li><a href="#loading-library-and-dataset" id="toc-loading-library-and-dataset" class="nav-link active" data-scroll-target="#loading-library-and-dataset">Loading library and Dataset</a></li>
   <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a></li>
-  <li><a href="#initial-exploration" id="toc-initial-exploration" class="nav-link" data-scroll-target="#initial-exploration">Initial Exploration</a></li>
+  <li><a href="#initial-exploration---first-viz" id="toc-initial-exploration---first-viz" class="nav-link" data-scroll-target="#initial-exploration---first-viz">Initial Exploration - First Viz</a></li>
   <li><a href="#research-question" id="toc-research-question" class="nav-link" data-scroll-target="#research-question">Research Question</a></li>
-  <li><a href="#first-viz" id="toc-first-viz" class="nav-link" data-scroll-target="#first-viz">First Viz</a></li>
+  <li><a href="#second-viz" id="toc-second-viz" class="nav-link" data-scroll-target="#second-viz">Second Viz</a></li>
   <li><a href="#are-the-areas-significantly-different-in-prices" id="toc-are-the-areas-significantly-different-in-prices" class="nav-link" data-scroll-target="#are-the-areas-significantly-different-in-prices">Are the areas significantly different in prices?</a></li>
   <li><a href="#third-viz" id="toc-third-viz" class="nav-link" data-scroll-target="#third-viz">Third Viz</a></li>
   <li><a href="#forth-viz" id="toc-forth-viz" class="nav-link" data-scroll-target="#forth-viz">Forth Viz</a></li>
@@ -4887,7 +4887,7 @@ box-shadow: 40px 0 100px #008cff85, -40px 0 100px #e100ffbb ;
 <span id="cb2-5"><a href="#cb2-5"></a>  <span class="fu">left_join</span>(cappuccino_data, <span class="at">by =</span> <span class="st">"country"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-</section><section id="initial-exploration" class="level2"><h2 class="anchored" data-anchor-id="initial-exploration">Initial Exploration</h2>
+</section><section id="initial-exploration---first-viz" class="level2"><h2 class="anchored" data-anchor-id="initial-exploration---first-viz">Initial Exploration - First Viz</h2>
 <div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># First Graph to see the correlation</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>cappuccino_index <span class="sc">%&gt;%</span> </span>
@@ -4941,7 +4941,7 @@ F-statistic: 761.8 on 1 and 2592 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb8-5"><a href="#cb8-5"></a><span class="st">Then I ran a linear model to explore further. With only these two variables, we can see that, for each country, the average price of a single cappuccino doesn'</span>t depend on how much people earn per hour <span class="cf">in</span> that <span class="fu">country</span> (r<span class="sc">^</span><span class="dv">2</span> <span class="ot">=</span> <span class="fl">0.2269</span>). Therefore,, there must be other drivers <span class="cf">in</span> this dataset that explain why the average value of a single cup of cappuccino is increasing or decreasing.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section><section id="research-question" class="level2"><h2 class="anchored" data-anchor-id="research-question">Research Question</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-code-overflow="wrap"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>How does local hourly wage relate to cappuccino prices?  </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section><section id="first-viz" class="level2"><h2 class="anchored" data-anchor-id="first-viz">First Viz</h2>
+</section><section id="second-viz" class="level2"><h2 class="anchored" data-anchor-id="second-viz">Second Viz</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-code-overflow="wrap"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>There<span class="st">'s a column that distinguishes among urban, suburban, and rural. Therefore, using these characteristics as drivers of price, I want to see which region experiences the largest increase in cappuccino prices.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>index_pivot <span class="ot">&lt;-</span> cappuccino_index <span class="sc">%&gt;%</span></span>
@@ -5594,7 +5594,7 @@ BP = 11.772, df = 1, p-value = 0.0006014</code></pre>
 <span id="cb27-27"><a href="#cb27-27"></a>  <span class="fu">left_join</span>(cappuccino_data, <span class="at">by =</span> <span class="st">"country"</span>)</span>
 <span id="cb27-28"><a href="#cb27-28"></a><span class="in">```</span></span>
 <span id="cb27-29"><a href="#cb27-29"></a></span>
-<span id="cb27-30"><a href="#cb27-30"></a><span class="fu">## Initial Exploration</span></span>
+<span id="cb27-30"><a href="#cb27-30"></a><span class="fu">## Initial Exploration - First Viz</span></span>
 <span id="cb27-33"><a href="#cb27-33"></a><span class="in">```{r}</span></span>
 <span id="cb27-34"><a href="#cb27-34"></a><span class="co"># First Graph to see the correlation</span></span>
 <span id="cb27-35"><a href="#cb27-35"></a>cappuccino_index <span class="sc">%&gt;%</span> </span>
@@ -5629,7 +5629,7 @@ BP = 11.772, df = 1, p-value = 0.0006014</code></pre>
 <span id="cb27-64"><a href="#cb27-64"></a>How does local hourly wage relate to cappuccino prices?  </span>
 <span id="cb27-65"><a href="#cb27-65"></a><span class="in">````</span></span>
 <span id="cb27-66"><a href="#cb27-66"></a></span>
-<span id="cb27-67"><a href="#cb27-67"></a><span class="fu">## First Viz</span></span>
+<span id="cb27-67"><a href="#cb27-67"></a><span class="fu">## Second Viz</span></span>
 <span id="cb27-68"><a href="#cb27-68"></a></span>
 <span id="cb27-69"><a href="#cb27-69"></a><span class="in">````{.r code-overflow="wrap"}</span></span>
 <span id="cb27-70"><a href="#cb27-70"></a>There<span class="st">'s a column that distinguishes among urban, suburban, and rural. Therefore, using these characteristics as drivers of price, I want to see which region experiences the largest increase in cappuccino prices.</span></span>
