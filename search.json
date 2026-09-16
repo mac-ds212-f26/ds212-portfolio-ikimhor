@@ -241,6 +241,116 @@
     ]
   },
   {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html",
+    "title": "HW00 P2",
+    "section": "",
+    "text": "Loading library and Dataset\nCodelibrary (tidytuesdayR)\nlibrary (tidyverse)\nlibrary (lmtest)\n\ncappuccino_index_initial &lt;- tidytuesdayR::tt_load('2026-09-08')",
+    "crumbs": [
+      "Homeworks",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#data-wrangling",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#data-wrangling",
+    "title": "HW00 P2",
+    "section": "Data Wrangling",
+    "text": "Data Wrangling\n\nCodecafe_data &lt;- cappuccino_index_initial$cafe\ncappuccino_data &lt;- cappuccino_index_initial$cappuccino_index\n\ncappuccino_index &lt;- cafe_data %&gt;%\n  left_join(cappuccino_data, by = \"country\")",
+    "crumbs": [
+      "Homeworks",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#initial-exploration",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#initial-exploration",
+    "title": "HW00 P2",
+    "section": "Initial Exploration",
+    "text": "Initial Exploration\n\nCode# First Graph to see the correlation\ncappuccino_index %&gt;% \n  ggplot(aes(x = hourly_wage_gbp, y = price_gbp)) +\n  geom_point(alpha = 0.5, color = \"hotpink\") +\n  theme_minimal() +\n  geom_smooth(method = \"lm\", color = \"gold\") +\n  labs(\n    title = \"Does the price of cappuccinos go up as wages increase?\",\n    subtitle = \"Comparing average hourly wage against cappuccino prices\",\n    x = \"Average Hourly Wage (GBP)\",\n    y = \"Average Cappuccino Price (GBP)\",\n    caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\nCode# Verifying Correlation\ncor (cappuccino_index$price_gbp, cappuccino_index$hourly_wage_gbp)\n\n[1] 0.4766038\n\nCodesummary(lm(price_gbp ~ hourly_wage_gbp, data = cappuccino_index))\n\n\nCall:\nlm(formula = price_gbp ~ hourly_wage_gbp, data = cappuccino_index)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-2.5587 -0.4064  0.0200  0.3962  6.7446 \n\nCoefficients:\n                Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)     2.413137   0.037788   63.86   &lt;2e-16 ***\nhourly_wage_gbp 0.085805   0.003109   27.60   &lt;2e-16 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 0.7248 on 2592 degrees of freedom\nMultiple R-squared:  0.2272,    Adjusted R-squared:  0.2269 \nF-statistic: 761.8 on 1 and 2592 DF,  p-value: &lt; 2.2e-16\n\n\nInitial view of the \"joined\" dataset signals my interest in the variables : price_gbp, hourly_wage, and city. While I want to explore spatial graphs, I find it problematic that there are no coordinates (long, lat) for me to use.\n\nThe first graph was to see whether the increase in wages is proportional to the increase in the price of a cappuccino. Although it's a moderately positive relationship (r ~ 0.477), which indicates that on average, the price of cappuccinos increases with the hourly wage per country. \n\nThen I ran a linear model to explore further. With only these two variables, we can see that, for each country, the average price of a single cappuccino doesn't depend on how much people earn per hour in that country (r^2 = 0.2269). Therefore,, there must be other drivers in this dataset that explain why the average value of a single cup of cappuccino is increasing or decreasing.",
+    "crumbs": [
+      "Homeworks",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#research-question",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#research-question",
+    "title": "HW00 P2",
+    "section": "Research Question",
+    "text": "Research Question\nHow does local hourly wage relate to cappuccino prices?",
+    "crumbs": [
+      "Homeworks",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#first-viz",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#first-viz",
+    "title": "HW00 P2",
+    "section": "First Viz",
+    "text": "First Viz\nThere's a column that distinguishes among urban, suburban, and rural. Therefore, using these characteristics as drivers of price, I want to see which region experiences the largest increase in cappuccino prices.\n\nCodeindex_pivot &lt;- cappuccino_index %&gt;%\n  pivot_longer(\n    cols = c(urban, suburban, rural), \n    names_to = \"area\",\n    values_to = \"is_present\") %&gt;%\n  filter (is_present == TRUE) %&gt;%\n  select(-is_present)\n\n# pivot longer so that I can get one singular column to work with for facet wrapping\n\nindex_pivot %&gt;%\n  ggplot (aes(x = area, y = price_gbp, fill = area)) + \n  geom_boxplot(alpha = 0.5) + \n  theme_minimal() + \n  scale_fill_viridis_d() + # color blind options\n  labs(title = \"Cappuccino Prices by Area Type\",\n       subtitle = \"Does the area in which you're in determine how much your coffee costs?\",\n       x = \"Area Type\",\n       y = \"Price\",\n       caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\n\nFrom afar, the boxplots seem to indicate little difference between the prices. However, if we scrutinize this, rural areas show the lowest and tightest distributions: lower prices on average, as well as less price variability from the minimum to the maximum a cup of coffee can go for. So there's more stable pricing. \n\nSuburban areas show more variability without reaching the highs of urban areas, with a steeper low than rural areas, indicating there's more competition among coffee prices. \n\nWhat's noticeable about the urban areas is their extreme outliers. This can indicate tourist areas, trends, and even really cheap places. Attributions to higher disposable income can also be explored!",
+    "crumbs": [
+      "Homeworks",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#are-the-areas-significantly-different-in-prices",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#are-the-areas-significantly-different-in-prices",
+    "title": "HW00 P2",
+    "section": "Are the areas significantly different in prices?",
+    "text": "Are the areas significantly different in prices?\n\nCodecappuccino_anova &lt;- aov(price_gbp ~ area, data = index_pivot)\nsummary(cappuccino_anova)\n\n              Df Sum Sq Mean Sq F value Pr(&gt;F)\narea           2    1.6  0.8166   1.205    0.3\nResiduals   2656 1799.9  0.6777               \n\n\nPrices don't statistically differ significantly from areas to areas. Even with the extreme outliers.",
+    "crumbs": [
+      "Homeworks",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#third-viz",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#third-viz",
+    "title": "HW00 P2",
+    "section": "Third Viz",
+    "text": "Third Viz\n\nCodecappuccino_index %&gt;%\n  ggplot(aes(x = minutes)) +\n  geom_histogram(fill = \"hotpink\", alpha = 0.5, bins = 40) +\n  theme_minimal() +\n  labs(title = \"Minutes of Work Needed to Buy a Cappuccino\",\n       x = \"Minutes of Work\",\n       y = \"Count of Cities\", \n       caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\nCode# this plot seems to have few extreme outliers, in which we will identify first then filter out to get a clearer picture\n\nindex_filtered_high &lt;- cappuccino_index %&gt;%\n  filter (minutes &gt; 100) %&gt;%\n  count (country)\nindex_filtered_high\n\n# A tibble: 10 × 2\n   country         n\n   &lt;chr&gt;       &lt;int&gt;\n 1 Djibouti        1\n 2 Egypt           1\n 3 India          11\n 4 Nicaragua       1\n 5 Oman            3\n 6 Pakistan        2\n 7 Philippines    11\n 8 Qatar           1\n 9 Sri Lanka       1\n10 Vietnam         6\n\nCodeindex_filtered_low &lt;- cappuccino_index %&gt;%\n  filter (minutes &lt; 100)\n\nindex_filtered_low %&gt;%\n  ggplot(aes(x = minutes)) +\n  geom_density(fill = \"hotpink\", alpha = 0.5) +\n  theme_minimal() +\n  labs(title = \"Distribution of Minutes of Work per Cappuccino\",\n       x = \"Minutes of Work\",\n       y = \"Density\", \n       caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\n\nThe initial view of this graph shows that there are extreme hours that people in some countries work to obtain a cup of cappuccino. These countries include: Djibouti, Egypt, India, Nicaragua, Oman, Pakistan, the Philippines, Qatar, Sri Lanka, and Vietnam. (Some of these countries don't make sense to me, as these are known to be either producers of beans or oil-rich nations. So I decided to filter out those under 100 minutes. This should give a clearer picture of the density in which people work.\n\nMost people work for about 15 minutes just to afford a cup of cappuccino.\n\nHowever, if there are such extreme hours worked, could there also be extreme prices?",
+    "crumbs": [
+      "Homeworks",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#forth-viz",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#forth-viz",
+    "title": "HW00 P2",
+    "section": "Forth Viz",
+    "text": "Forth Viz\n\nCodemean_price &lt;- mean(cappuccino_index$price, na.rm = TRUE)\n\ncappuccino_index %&gt;%\n  mutate(reliability = ifelse(n &lt; 10, \"Small Sample (&lt;10)\", \"Adequate Sample\")) %&gt;%\n  ggplot(aes(x = n, y = price, color = reliability)) +\n  geom_point(alpha = 0.5, size = 2) +\n  geom_hline(yintercept = mean_price, linetype = \"dashed\", color = \"hotpink\") +\n  theme_minimal() +\n  labs(\n    title = \"Extreme price estimates are driven by small sample sizes\",\n    subtitle = \"Dashed line shows the global average.\",\n    x = \"Number of Cafés Sampled per City (n)\",\n    y = \"Average Cappuccino Price (GBP)\",\n    caption = \"Data Source: TidyTuesday\")\n\n\n\n\n\n\n\nMost of the extreme outliers are attributable to the small sample sizes. Therefore, we can simply say that, because some cities have fewer than 10 samples, the correlation is unreliable. It is not fair to say that hourly wage is a good/bad predictor of the price of a cup of cappuccino simply because some cities have more cafes sampled than others.",
+    "crumbs": [
+      "Homeworks",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#confirmation-of-variations",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#confirmation-of-variations",
+    "title": "HW00 P2",
+    "section": "Confirmation of variations",
+    "text": "Confirmation of variations\n\nCodevariability_model &lt;- lm(price ~ n, data = cappuccino_index)\nbptest(variability_model)\n\n\n    studentized Breusch-Pagan test\n\ndata:  variability_model\nBP = 11.772, df = 1, p-value = 0.0006014\n\n\nIf I were to use a simple linear model and summary, it would test the mean instead of the variance. We want to know whether small-sample-size cities are more likely to have extreme prices. Therefore, I did some googling and found out about bptest. The output p-value = 0.0006014 indicates that the variance is not constant in our dataset, and the spread of cappuccino prices is dependent on how many cafes were sampled.",
+    "crumbs": [
+      "Homeworks",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#conclusion",
+    "href": "hw/ds212-hw-ikimhor/hw00/src/hw00-p2.html#conclusion",
+    "title": "HW00 P2",
+    "section": "Conclusion",
+    "text": "Conclusion\nTo answer the research question: How does local hourly wage relate to cappuccino prices? We understand that the price of a cappuccino increases with the local hourly wage (in GBP); however, if that were the case, we would expect the hourly wage across different areas to differ as well. Viz Two, however, shows that there's no significant difference in cappuccino prices between the three areas. Furthermore, in Viz Three, most people spend about the same amount of time to afford a cup of cappuccino (10-15 minutes), with a few extreme outliers. This is consistent with the trends from Viz One, where if the time to afford a cup of cappuccino is relatively constant, then the hourly wage must also increase proportionally. We also understand that wage is not the only driving factor, and that much less than intuition would suggest, coupled with the reasons for those extreme outliers being a small sample size from different cities.",
+    "crumbs": [
+      "Homeworks",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>HW00 P2</span>"
+    ]
+  },
+  {
     "objectID": "extra/extra-sample1.html",
     "href": "extra/extra-sample1.html",
     "title": "Extra Sample 1",
@@ -248,7 +358,7 @@
     "text": "Add content here",
     "crumbs": [
       "Extras",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extra Sample 1</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Extra Sample 1</span>"
     ]
   },
   {
@@ -259,7 +369,7 @@
     "text": "Add content here",
     "crumbs": [
       "Extras",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Extra Sample 2</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extra Sample 2</span>"
     ]
   }
 ]
