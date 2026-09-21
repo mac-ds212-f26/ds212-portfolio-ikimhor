@@ -175,7 +175,6 @@ ggplot(weather) +
   geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +
   geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248') +
   theme_classic()
-
 ```
 
 
