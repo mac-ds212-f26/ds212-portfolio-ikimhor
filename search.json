@@ -230,6 +230,171 @@
     ]
   },
   {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html",
+    "title": "HW02-P1 Adv Data Viz",
+    "section": "",
+    "text": "Instructions\nUsing ggplot2 and other tools in R, recreate the original New York Times graphic to the greatest extent possible. Try to get as close as possible to the figure below:\nYou will need to use reference pages and documentation to discover necessary tools. For example, you may want to Google search “ggplot multiple plots”. When looking through results, check publication dates and use newer references. Some helpful resources could include R documentation, Stack Overflow, and R cheatsheets.\nRequirements\nBonus: If you’d like further practice, recreate the legend in the temperature graph that shows how the colored lines relate to record, normal, and actual highs.",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW02-P1 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#instructions",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#instructions",
+    "title": "HW02-P1 Adv Data Viz",
+    "section": "",
+    "text": "Temperature graph\n\nBands for the record, normal, and actual highs and lows are shown in the correct colors.\nDownward triangles point to the record high temperatures above the red band.\nText displays the record high temperatures above the triangles.\nX-axis label: 3-letter month abbreviations appear in the middle of each month.\nY-axis label: Tick marks at 0, 40, 80, and 120 only.\nVertical lines separate the months.\nTitle of “Temperature” is included.\n\n\nPrecipitation\n\nTan area and blue line reflecting the monthly cumulative precipitation is included.\nText (number) for cumulative precipitation for each month is included at the end of each month just above the blue line.\nDownward triangles point to the record precipitation days.\nVertical lines separate the months.\nTitle of “Precipitation” is included.\n\n\nOverall\n\nBoth the temperature and precipitation graphs are in one figure.\nThe temperature plot takes up more vertical space than the precipitation plot.\nThe title “SFO weather in 2011” is present.\n\n\nResource reflection\n\nAt least 1 resource is listed\nAt least 3 sentences about resources and their helpfulness in the task",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW02-P1 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#setup",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#setup",
+    "title": "HW02-P1 Adv Data Viz",
+    "section": "Setup",
+    "text": "Setup\n\nCodelibrary(tidyverse)\nweather &lt;- read_csv(\"https://mac-stat.github.io/data/sfo_weather.csv\")",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW02-P1 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#visualization",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#visualization",
+    "title": "HW02-P1 Adv Data Viz",
+    "section": "Visualization",
+    "text": "Visualization\nTop Half Visualization\n\nCodeggplot(weather) + \n  geom_linerange(aes(x = date, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +\n  geom_linerange(aes(x = date, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +\n  geom_linerange(aes(x = date, ymin = Low, ymax = High), color = '#A90248') + \n  geom_vline(\n    data = subset(weather, Day == 1), # this took a while to figure out, so this will start a line every start of the month\n    aes(xintercept = date), \n    linetype = \"dotted\", \n    color = \"grey\") + \n  scale_x_date(\n    breaks = subset(weather, Day == 15)$date, # give or take its in the middle\n    labels = month.abb)\n\n\n\n\n\n\n\nBottom Half Visualization\n\nCodemonth_labels &lt;- weather %&gt;%\n  group_by(Month) %&gt;%\n  filter(dateInYear == max(dateInYear))\n\nggplot(weather, aes(x = dateInYear, y = CulmPrec)) +\n  geom_area(aes(group = Month), fill = \"#ebeae2\") +\n  geom_line(aes(group = Month), color = \"#32a3d8\") +\n  geom_point(data = filter(weather, RecordP == TRUE), \n             shape = 25,\n             fill = \"black\", \n             size = 2) +\n  geom_text(data = month_labels, \n            aes(label = CulmPrec),\n            vjust = -0.5,\n            hjust = 0.5,\n            size = 3.5) +\n  theme_classic() +\n  labs(x = \"dateInYear\", y = \"CulmPrec\")",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW02-P1 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#resources-reflection-required",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#resources-reflection-required",
+    "title": "HW02-P1 Adv Data Viz",
+    "section": "Resources Reflection (required)",
+    "text": "Resources Reflection (required)\nList the resources you used to help with this assignment then write 3-5 sentence reflection on which resources were most helpful in finishing this task.\nResources:\n\nI used the previous completed “Adv Viz” codes and simply clean it up.\nhttps://rstudio.github.io/cheatsheets/data-visualization.pdf for scale syntax\n\nReflection:\n\nThis was an enjoyable plot to make",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW02-P1 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html",
+    "title": "HW02-P2 Adv Data Viz",
+    "section": "",
+    "text": "Instructions\nTask: Open up the New York Times article A Summer of Strikes, and scroll down to the plot titled “Union membership has fallen sharply over the past four decades (Share of the work force in a union, by industry)”.\nUsing ggplot2 and other tools in R, recreate this plot. Note that you will need to create the data underlying the plot yourself. You can create this data in R with tibble(). You can also write the data in Excel or Google Sheets and export it as a CSV file.\nRequirements:\nBonus: Additional possibilities to enhance your visualization include adjusting the default aesthetics of the arrows, aligning your plots neatly, and adding margins in order to left-align the y-axis text.",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#instructions",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#instructions",
+    "title": "HW02-P2 Adv Data Viz",
+    "section": "",
+    "text": "Overall\n\nPanels for “All workers”, “By Sector”, and “By Industry” are shown.\nArrows showing the change from 1983 to 2022 are shown.\n\nNote: be sure that the arrows all point in the correct direction!\n\n\nThe actual percentages in 1983 and 2022 are shown as text.\nX-axis tick marks are at 0, 25, and 50.\nPlot title says “Union membership has fallen sharply over the past four decades”.\nPlot subtitle says “Share of the work force in a union, by industry”.\n\n\nResource reflection\n\nAt least 1 resource is listed\nAt least 3 sentences about resources and their helpfulness in the task",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#library-loading",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#library-loading",
+    "title": "HW02-P2 Adv Data Viz",
+    "section": "Library Loading",
+    "text": "Library Loading\n\nCodelibrary (tidyverse)\nlibrary(ggtext)",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#setup",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#setup",
+    "title": "HW02-P2 Adv Data Viz",
+    "section": "Setup",
+    "text": "Setup\n\nCode# using tibble to create the dataframe\npopulation_survey &lt;- data.frame(\n  Category = c(\"All workers\", \"Private sector\", \"Public sector\", \"Transportation and utilities\", \"Manufacturing\", \"Mining\", \"Construction\", \"Education and health\", \"Arts, entertainment and recreation\", \"Business services\", \"Retail, food and hospitality\", \"Public administration\", \"Agriculture\"),\n  Grouping = c(\"Overall\", \"Sector\", \"Sector\", \"Industry\", \"Industry\", \"Industry\", \"Industry\", \"Industry\", \"Industry\", \"Industry\", \"Industry\", \"Industry\", \"Industry\"),\n  Rate_1983 = c(20, 17, 37, 47, 28, 27, 28, 26, 17, 10, 8, 30, 4),\n  Rate_2022 = c(10, 6, 33, 16, 8, 7, 13, 17, 7, 3, 3, 28, 5))\n\npopulation_survey %&gt;% count ()\n\n   n\n1 13\n\nCodepopulation_survey %&gt;% summary()\n\n      Category       Grouping    Rate_1983    Rate_2022 \n Length   :13   Length   :13   Min.   : 4   Min.   : 3  \n N.unique :13   N.unique : 3   1st Qu.:17   1st Qu.: 6  \n N.blank  : 0   N.blank  : 0   Median :26   Median : 8  \n Min.nchar: 6   Min.nchar: 6   Mean   :23   Mean   :12  \n Max.nchar:34   Max.nchar: 8   3rd Qu.:28   3rd Qu.:16  \n                               Max.   :47   Max.   :33  \n\n\n\nFor the data, I simply extracted the exact data from the graph itself. So all the variables names are mathching with its respective variables (By Sector, and By Industry)",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#wrangling-data",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#wrangling-data",
+    "title": "HW02-P2 Adv Data Viz",
+    "section": "Wrangling Data",
+    "text": "Wrangling Data\n\nCode# I am now adding new empty rows so that I can break the y axis?\nplaceholder_Rows &lt;- data.frame(\n  Category = c(\"bySector\", \"byIndustry\"),\n  Rate_1983 = c(NA, NA),\n  Rate_2022 = c(NA, NA))\n\n# Combining the dataframe into one\ncombined_populationSurvey &lt;- bind_rows(population_survey, placeholder_Rows)\n\n# Manually re-leveling all the categories, where the gaps will just be the placeholder for headers?\nlevel_order &lt;- c(\"Agriculture\", \"Public administration\", \"Retail, food and hospitality\", \"Business services\", \"Arts, entertainment and recreation\", \"Education and health\", \n  \"Construction\", \"Mining\", \"Manufacturing\", \"Transportation and utilities\", \"byIndustry\", \"Public sector\", \"Private sector\", \"bySector\", \"All workers\")\n\ncombined_populationSurvey &lt;- combined_populationSurvey %&gt;%\n  mutate(Category = factor(Category, levels = level_order))\n\n\n\nThe one of the main challenges I see is grouping “By Sector” and “By Industry”. I thought I will just create a gap in between the dataframe itself with empty rows so when I use whatever geom_ it will simply just create the header gaps.",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#visualization-attempt-1",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#visualization-attempt-1",
+    "title": "HW02-P2 Adv Data Viz",
+    "section": "Visualization Attempt #1",
+    "text": "Visualization Attempt #1\n\nCode# detailing the arrow\nsegment_shapes &lt;- data.frame (\n  lineend = c('round', 'butt', 'square'),\n  linejoin = c('round', 'mitre', 'bevel'),\n  stringsAsFactors = FALSE\n)\n\nggplot (combined_populationSurvey, aes (x = Rate_1983, y = Category, yend = Category, xend = Rate_2022)) +\n  geom_segment(\n    lineend = segment_shapes$lineend,\n    linejoin = segment_shapes$linejoin,\n    size = 3) + \n  theme_minimal()",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#visualization-attempt-2",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#visualization-attempt-2",
+    "title": "HW02-P2 Adv Data Viz",
+    "section": "Visualization Attempt #2",
+    "text": "Visualization Attempt #2\n\nCode# Since I can't get the arrow to work, i use grid instead\nggplot(combined_populationSurvey, aes(x = Rate_1983, y = Category, xend = Rate_2022, yend = Category)) +\n  geom_segment(\n    arrow = arrow(length = unit(0.06, \"inches\"), type = \"open\"),\n    color = \"hotpink\",\n    linewidth = 0.5) +\n  scale_x_continuous(limits = c(0, 50), breaks = c(0, 25, 50)) + \n  theme_minimal()\n\n\n\n\n\n\n\n\nAfter getthing the arrows and the data to reflect accurately to the reference NYT images, I needed to create the subheading breaks, and the correct labs",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#general-aesthetic",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#general-aesthetic",
+    "title": "HW02-P2 Adv Data Viz",
+    "section": "General Aesthetic",
+    "text": "General Aesthetic\n\nCodeggplot(combined_populationSurvey, aes(x = Rate_1983, y = Category, xend = Rate_2022, yend = Category)) +\n  geom_segment(\n    arrow = arrow(length = unit(0.06, \"inches\"), type = \"open\"), # this adds in the skinny arrows to the directions, close will make it filled\n    color = \"hotpink\",\n    linewidth = 0.5) +\n  scale_x_continuous(limits = c(0, 50), breaks = c(0, 25, 50)) + # manually adjusting the labels on the x axis, so this will only show 0, 25, and 50 breaks\n  geom_text(\n    aes(\n      x = Rate_1983, \n      label = Rate_1983,\n      hjust = ifelse(Rate_1983 &gt; Rate_2022, -0.5, 1.5)),\n    size = 2.5, color = \"black\", fontface = \"bold\") +\n  geom_text(\n    aes(\n      x = Rate_2022, \n      label = Rate_2022,\n      hjust = ifelse(Rate_1983 &gt; Rate_2022, 1.5, -0.5)),\n    size = 2.5, color = \"black\", fontface = \"bold\") +\n  \n  annotate(\"text\", x = 10, y = 15.8, label = \"2022\", color = \"gray50\", size = 3.5) + # this to add in the years manually, according to the x axis\n  annotate(\"text\", x = 20, y = 15.8, label = \"1983\", color = \"gray50\", size = 3.5) +\n  \n  annotate(\"segment\", x = 10, xend = 10, y = 15.2, yend = 15.5, color = \"gray50\", linewidth = 0.5) + # this to add in the two vertical lines manually, according to the x axis\n  annotate(\"segment\", x = 20, xend = 20, y = 15.2, yend = 15.5, color = \"gray50\", linewidth = 0.5) +\n  \n  labs(\n    title = \"Union membership has fallen sharply over the past four decades\",\n    subtitle = \"Share of the work force in a union, by industry\",\n    caption = \"Source: Current Population Survey, via unionstats.com  •  By The New York Times\",\n    x = NULL, \n    y = NULL) +\n  scale_y_discrete(\n    labels = c(\n      \"bySector\" = \"**BY SECTOR**\",\n      \"byIndustry\" = \"**BY INDUSTRY**\")) +\n  coord_cartesian(clip = \"off\") +\n  theme(\n    plot.title.position = \"plot\",\n    plot.caption.position = \"plot\",\n    \n    plot.title = element_text(hjust = 0, face = \"bold\", size = 14, color = \"gray30\"), \n    plot.subtitle = element_text(hjust = 0, size = 11, color = \"gray50\", margin = margin(b = 15)), \n    plot.caption = element_text(hjust = 0, size = 7.5, color = \"gray60\", margin = margin(t = 15)),\n    \n    axis.text.y = element_markdown(hjust = 0, color = \"black\", size = 10),\n    \n    panel.grid.major.y = element_blank())\n\n\n\n\n\n\n\n\nThe graph looks about right, but the only problem is loosing the y axis dash, and remove the background so that it is just white.",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#finishing-touch",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#finishing-touch",
+    "title": "HW02-P2 Adv Data Viz",
+    "section": "Finishing Touch",
+    "text": "Finishing Touch\n\nCodeggplot(combined_populationSurvey, aes(x = Rate_1983, y = Category, xend = Rate_2022, yend = Category)) +\n  geom_segment(\n    arrow = arrow(length = unit(0.06, \"inches\"), type = \"open\"), # this adds in the skinny arrows to the directions, close will make it filled\n    color = \"hotpink\",\n    linewidth = 0.5) +\n  scale_x_continuous(limits = c(0, 50), breaks = c(0, 25, 50)) + # manually adjusting the labels on the x axis, so this will only show 0, 25, and 50 breaks\n  geom_text(\n    aes(\n      x = Rate_1983, \n      label = Rate_1983,\n      hjust = ifelse(Rate_1983 &gt; Rate_2022, -0.5, 1.5)),\n    size = 2.5, color = \"black\", fontface = \"bold\") +\n  geom_text(\n    aes(\n      x = Rate_2022, \n      label = Rate_2022,\n      hjust = ifelse(Rate_1983 &gt; Rate_2022, 1.5, -0.5)),\n    size = 2.5, color = \"black\", fontface = \"bold\") +\n  \n  annotate(\"text\", x = 10, y = 15.8, label = \"2022\", color = \"gray50\", size = 3.5) + # this to add in the years manually, according to the x axis\n  annotate(\"text\", x = 20, y = 15.8, label = \"1983\", color = \"gray50\", size = 3.5) +\n  \n  annotate(\"segment\", x = 10, xend = 10, y = 15.2, yend = 15.5, color = \"gray50\", linewidth = 0.5) + # this to add in the two vertical lines manually, according to the x axis\n  annotate(\"segment\", x = 20, xend = 20, y = 15.2, yend = 15.5, color = \"gray50\", linewidth = 0.5) +\n  \n  labs(\n    title = \"Union membership has fallen sharply over the past four decades\",\n    subtitle = \"Share of the work force in a union, by industry\",\n    caption = \"Source: Current Population Survey, via unionstats.com  •  By The New York Times\",\n    x = NULL, \n    y = NULL) +\n  scale_y_discrete(\n    labels = c(\n      \"bySector\" = \"**BY SECTOR**\",\n      \"byIndustry\" = \"**BY INDUSTRY**\")) +\n  coord_cartesian(clip = \"off\") +\n  theme(\n    panel.background = element_blank(), # the 2 lines below including this sets the background white, and removes the tick for the y axis labels setting the vertical line still legible\n    panel.grid.major.x = element_line(color = \"gray90\"),\n    axis.ticks.y = element_blank(),\n    \n    plot.title.position = \"plot\",\n    plot.caption.position = \"plot\",\n    \n    plot.title = element_text(hjust = 0, face = \"bold\", size = 14, color = \"gray30\"), \n    plot.subtitle = element_text(hjust = 0, size = 11, color = \"gray50\", margin = margin(b = 15)), \n    plot.caption = element_text(hjust = 0, size = 7.5, color = \"gray60\", margin = margin(t = 15)),\n    \n    axis.text.y = element_markdown(hjust = 0, color = \"black\", size = 10),\n    \n    panel.grid.major.y = element_blank())",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
+    ]
+  },
+  {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#resources-reflection-required",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#resources-reflection-required",
+    "title": "HW02-P2 Adv Data Viz",
+    "section": "Resources Reflection (required)",
+    "text": "Resources Reflection (required)\nList the resources you used to help with this assignment then write 3-5 sentence reflection on which resources were most helpful in finishing this task.\nResources:\n\nhttps://ggplot2.tidyverse.org/reference/geom_segment.html\nhttps://ggplot2.tidyverse.org/reference/geom_segment.html\nGoogle AI overview for: data.frame syntax, removing axis labels, left align texts from labs, how to add geom_text and how to use geom_text, adding annotations for the years\n\nReflection:\n\nThis took way too long to do. It is enriching however, I learnt new syntax, ways to manually manipulate different aspects of the graph that before I would simply settled for the default. Furthermore, I believe I am learning to break down graphs more easily, dividing the core aesthetic up makes writing code more digestible.",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
+    ]
+  },
+  {
     "objectID": "pcl/pcl.html",
     "href": "pcl/pcl.html",
     "title": "Pre-Class Learning Summaries",
@@ -237,7 +402,7 @@
     "text": "R",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -248,7 +413,7 @@
     "text": "Quarto\n\n\n\nfrom qmd4sci.njtierney.com",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -259,7 +424,7 @@
     "text": "Add content here",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>ICA Sample 1</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>ICA Sample 1</span>"
     ]
   },
   {
@@ -270,7 +435,7 @@
     "text": "Exercise\nCarryout the following steps to clean and save the San Francisco Weather data. Make sure to download and add the data file to your portfolio repository as instructed.\nStep 1\nCodelibrary (tidyverse)\n\nweather &lt;- read.csv('data/raw/weather.csv')\nStep 2\nCodeweather_clean &lt;- weather %&gt;%\n    mutate(PrecipYr = na_if(PrecipYr, 99999))\nStep 3\nCodeweather_clean &lt;- weather_clean %&gt;%\n    mutate(dateInYear = yday(mdy(date))) # this turns the year into months (count) then months to day (count)\n\nprint (weather_clean$dateInYear)\n\n  [1] 324 167 129 299 270 187 307  85 277 330 263 329  79 213  37 105 217 165\n [19] 290  89 289 340 326 356  42 111  20  44  70 121  40 172  25 248 198  39\n [37] 298 280 160  14 130  45  22 206 230 193 104 255 319 103  13 296 349 176\n [55] 279 110  84  29 141 252 221 108  33 365 149 287 102 145 118 107  64 224\n [73] 316  51 305 347 138 363 282 143 285 170  48 204  24 181 214 225 163  43\n [91]   1 308  78 116 233  61  86 310  49 242 246 247 239 219 135 344 339 292\n[109]  53 144 211 100 325 283  65 338 293 350 124  77 218  98 194  19  17 162\n[127] 203  31 357  99 174 147  75  16 335   9  50  92 122 152 345 207 327 364\n[145] 348 140 126 343 272 232  15 253 251 195 201 362 241 127 133  41 304 159\n[163] 117  72  36 267 322 157 295 288 257 106 185  88 355 212 210 229  80  30\n[181]  93 311 202 262 273 164 168 291 183 313 254 113 336  73  27 199 215  38\n[199]  62 134 132  35 125 236 265 332  71 153 238 351  28 222 148 274 208 341\n[217]  60 155 328 331  12 320 360 250 244  26 303 178 191 269 281 156 205 169\n[235] 245  82  97  96 177 190  56 243 249 300  91 314 188 334 259 359 101 256\n[253] 271   2   3 179 223 278 158  55  69 228 234 166 276  81 275  90 302  83\n[271] 312  23  68 286 173  57  52 317  34 180  74 337 301 342 200 154 139 136\n[289]  11 315 119 128 231  87 114 237 333 268 196 323 260 258 266 353 346   4\n[307]  76 240 297 182   5 150 142 123  94 226 361 318 321 175  46 137  66 284\n[325] 115  63  18 235 171 306  32 146 209 264  95 197 227 309 109  47  21 189\n[343] 294 151  67 131   7  59 186 112   6 216 261  58 354 184   8 120 161  54\n[361] 192 352 220 358  10\nStep 4\nCodeweather_clean &lt;- weather_clean %&gt;%\n  mutate (month_name = month(Month, label = TRUE, abbr = TRUE))\nStep 5\nCodewrite_csv(weather_clean, file = \"data/processed/weather_clean.csv\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>2 Cleaning SFO Weather Data</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>2 Cleaning SFO Weather Data</span>"
     ]
   },
   {
@@ -281,7 +446,7 @@
     "text": "Read in the weather data in this file with the correct relative file path after you move it to the instructed location.\nThere is a variable that has values that don’t make sense in the data context. Figure out which variable this is and clean it up by making those values missing using na_if().\nCreate a variable called dateInYear that indicates the day of the year (1-365) for each case. (Jan 1 should be 1, and Dec 31 should be 365).\nCreate a variable called month_name that shows the 3-letter abbreviation for each case.\nSave the wrangled data to the data/processed/ folder using write_csv(). Name this file weather_clean.csv. Look up the documentation for this function by typing ?write_csv in the Console. You’ll need to write an appropriate relative path.",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>2 Cleaning SFO Weather Data</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>2 Cleaning SFO Weather Data</span>"
     ]
   },
   {
@@ -292,7 +457,7 @@
     "text": "🧩 Learning Goals\nBy the end of this lesson, you should be able to:",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -303,7 +468,7 @@
     "text": "Navigate ggplot2 reference page to find needed functions for a desired visualization\nNavigate the different sections of a function help page to construct desired plot features, in particular,\n\nNavigate the Usage section to identify arguments that must be set\nNavigate the Arguments section to understand how arguments work\nNavigate the Aesthetics section to learn how plot appearance can be controlled\nNavigate the Examples section for some usage examples\n\n\nIdentify when to use different data arguments within ggplot() and geom_() layers",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -314,7 +479,7 @@
     "text": "Introduction 1\n\nIn this lesson, we are going to recreate NYTimes 2015 Temperature Visualization (html) using data from San Francisco (SFO) in 2011.\n\n\nScreenshot of NYTimes 2015 Temperature Visualization",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -325,7 +490,7 @@
     "text": "Reading Data\nRun the code chunk below to load the tidyverse package and read in the San Francisco weather data.\n\nCodelibrary(tidyverse)\nweather &lt;- read_csv(\"https://mac-stat.github.io/data/sfo_weather.csv\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -336,7 +501,7 @@
     "text": "Understanding Data\nBelow is the codebook of the data. Familiarize yourself with the meaning of each variable. Use the codebook as a reference when using the data.\n\n\nMonth: Month of the year (1-12)\n\nDay: Day within the month (1-31)\n\nLow/High: Low/high temperature this day\n\nNormalLow/NormalHigh: Typical low/high temperature for this day of the year\n\nRecordLow/RecordHigh: Record low/high temperature for this day of the year\n\nLowYr/HighYr: Year in which the record low/high was observed\n\nPrecip: Amount of precipitation (inches) this day\n\nRecordPrecip: Record amount of precipitation for this day of the year\n\nPrecipYr: Year in which the record precipitation was observed\n\ndate: The actual date in 2011 for this day in YYYY-MM-DD format\n\ndateInYear: What day of the year is it? (1-365)\n\nRecord: Logical (TRUE/FALSE) indicating whether this day had a high temperature record\n\nRecordText: Text that displays the record high for this day (\"Record high: ##\")\n\nRecordP: Logical (TRUE/FALSE) indicating whether this day had a precipitation record\n\nCulmPrec: Cumulative precipitation for the month up to this day",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -347,7 +512,7 @@
     "text": "Exercise 1\nExamine the NYTimes 2015 Temperature Visualization (html) then answer the following questions.\nData Storytelling\n\n\nRelate the intro paragraph: “Scientists declared that 2015 was Earth’s hottest year on record…” to the design of the visualization. In particular, based on the intro paragraph,\n\nWhat key message/claim does NYTimes want readers to be able to explore?\n\nA culmination of temperature and weather data from 1981 to 2010, which is used to overlay against the temperature of 2015 data, showing a trend of increasingly warmer temperatures and extremer weather data.\n\nHow did this goal inform what information is displayed in the visualization?\n\nNYtimes is trying to demonstrate or use data visualization supporting the claim that they’re making that “2015-2016” is one of the hottest year recorded at the TIME. Furthermore, graphs are showing only certain statistics which is useful in proving that claim.\n\n\nAesthetic Mapping\n\n\nWhat specific variables (from the data codebook) underlie the visualization?\n\nTemperature (F/C) on the Y Axis\nMonths on the Y Axis\nGeom_bar pitted against negative + positive values\n\ndivided data through/ grouped data through shades/colors\n\n\nGeom_line for the precipitation\nGeom_polygon for the world map\nI think the codebook is represented well in the NYtimes graphs, like all of it\n\n\n\nHow do these variables map to aesthetics of the visual elements, eg, position, size, shape, and color of glyphs?\n\nNormal highs lows, Record highs lows, are represented through shade/fill, alpha?\nPosition not relative\nDotted lines to divide the months\nLabels are clear\nLegends\nSearch Bar for dataset selecting\nButton switching between Celsius and Fahrenheit",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -358,7 +523,7 @@
     "text": "Exercise 2\nNavigate the Geoms section of the ggplot2 reference page to find a geom that corresponds to the visual elements in the temperature plot. Using both the small thumbnail visuals on the right and the names of the geom’s, brainstorm some possibilities for geom’s you might use to recreate the temperature visualization.\n\ngeom_linerange\n\nusing layering or dodging (position)\n\n\ngeom_line for precipitation\n\n\n\n\n\n\n\nNoteNavigating Documentation / Reference Pages\n\n\n\nYou need to navigate the geoms further by opening up their reference pages to understand if a particular geom is suitable for our task. Let’s look at the geom_point documentation page to learn how to read a documentation page.\nThe Usage section shows all of the possible inputs (arguments) to the geom. These are all of the ways that a geom can be customized. Just looking at the argument names can help give a hint as to what arguments might fit our needs.\n\nmapping\ndata\nstat\nposition\n\nThe Arguments section, on the other hand, explains in detail what each argument does and the possible values the argument can take. The mapping, data, and ... arguments will be the most commonly used by far.\n\n\nmapping is the argument that is being used when we specify which variables should link or map to the plot aesthetics (the code inside aes()).\n\ndata is the argument where we specify the dataset containing the variables that the geom is using.\n\n... is used for fixed aesthetics (ones that don’t correspond to a variable), eg, to set the color of all points, we use color = \"red\" and to set the size of all points, we use size = 3.\n\nThe Aesthetics section of a geom documentation page gives information on how the visual elements of the geom correspond to data. For example, the geom_point documentation page shows that x and y aesthetics are available. It also shows some new aesthetics like stroke.\n\n\n\n\n\n\n\n\nNotedata Argument\n\n\n\nPreviously you have used one dataset per plot by specifying that as the first argument of ggplot(). However, multiple data sets can be passed into ggplot as shown in the example below.\n\nCodedata(diamonds)\n\ndiamonds_avg_price &lt;- diamonds |&gt;\n  group_by(carat) |&gt;\n  summarize(avg_price = mean(price)) |&gt;\n  arrange(carat)\ndiamonds_avg_price &lt;- diamonds_avg_price[seq(1, nrow(diamonds_avg_price), 3), ]\n\nggplot(diamonds, aes(x = carat, y = price)) +\n  geom_point() +\n  geom_point(\n    data = diamonds_avg_price,\n    aes(x = carat, y = avg_price),\n    color = \"deepskyblue\",\n    size = 3\n  )\n\n\n\n\n\n\n\n\n\nLook at the geom_linerange documentation page and start off your temperature visualization with the record lows and highs. Your plot should look like the one below. The hex code of the used light tan color is #ECEBE3.\n\n\nSFO Weather Records in 2011\n\n\nCodeggplot(weather) +\n  geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\n\n\nTipKeyboard Shortcuts\n\n\n\nAs you work on this plot, try to use some new keyboard shortcuts. Focus on the following:\n\nInsert code chunk: Ctrl+Alt+I (Windows). Option+Command+I (Mac).\nRun current code chunk: Ctrl+Shift+Enter (Windows). Command+Shift+Return (Mac).\nRun current line/currently selected lines: Ctrl+Enter (Windows). Command+Return (Mac).",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -369,7 +534,7 @@
     "text": "Exercise 3\nIn your visualization, also display the usual temperatures (NormalLow and NormalHigh) and actual 2011 temperatures (Low and High). Your plot should look like the one below. The hex code of the color used for the usual temperatures is \"#C8B8BA\" and for the color used for actual temperatures is \"#A90248\".\n\n\nSFO observed, Average, and Record Daily Temperatures in 2011\n\n\nCodeggplot(weather) + \n  geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +\n  geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +\n  geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = '#A90248') +\n  theme_classic()\n\n\n\n\n\n\n\n\n\n\n\n\n\nTipFiner Control\n\n\n\nIf you’d like finer control of the width of these lines/rectangles, check out the geom_rect documentation page.\n\n\nFiner control\n\nCodeggplot(weather) + \n  geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = RecordLow, ymax = RecordHigh), fill = '#ECEBE3') +\n  geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = NormalLow, ymax = NormalHigh), fill = '#C8B8BA') +\n  geom_rect(aes(xmin = dateInYear + 0.5, xmax = dateInYear - 0.5, ymin = Low, ymax = High), fill = '#A90248') +\n  theme_classic()\n\n\n\n\n\n\nCode# when I first ran without +-0.5, there wasn't anything on the plot, however to decide the width of the rectangles, I can make space or like temporal space so that I can actually see the x values being represented",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -380,7 +545,7 @@
     "text": "Exercise 4\nRecreate the visual demarcations of the months by adding vertical lines separating the months. Brainstorm how we might draw those vertical lines. What geom might we use? What subset of the data might we use in that geom layer to draw lines only at the month divisions?\n\nCodeggplot(weather) + \n  geom_linerange(aes(x = date, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +\n  geom_linerange(aes(x = date, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +\n  geom_linerange(aes(x = date, ymin = Low, ymax = High), color = '#A90248') + \n  geom_vline(\n    data = subset(weather, Day == 1), # this took a while to figure out\n    aes(xintercept = date), \n    linetype = \"dotted\", \n    color = \"grey\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -391,7 +556,7 @@
     "text": "Exercise 5\nChange the x-axis labels so that the month names display in the center of each month’s slice of the plot.\n\n\n\n\n\n\nTipMonth Names\n\n\n\nR has built-in variables called month.abb and month.name that contain abbreviated and full month names.\n\n\n\nCodeggplot(weather) + \n  geom_linerange(aes(x = date, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +\n  geom_linerange(aes(x = date, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +\n  geom_linerange(aes(x = date, ymin = Low, ymax = High), color = '#A90248') + \n  geom_vline(\n    data = subset(weather, Day == 1), # this took a while to figure out, so this will start a line every start of the month\n    aes(xintercept = date), \n    linetype = \"dotted\", \n    color = \"grey\") + \n  scale_x_date(\n    breaks = subset(weather, Day == 15)$date, # give or take its in the middle\n    labels = month.abb)\n\n\n\n\n\n\nCode# found hte scale_x_date function within https://rstudio.github.io/cheatsheets/data-visualization.pdf\n\n\nTry to figuring out this new challenge using search engines and LLMs:\n\nSearch Engines. Use Google to search for possible solutions using the jargon that is most likely to return the most relevant results. Record search queries and your thought process in selecting which search results to look at first.\nLLMs. Use ChatGPT or Gemini with prompts that will most efficiently get you the desired results. Record the chat prompts used and output given. Evaluate the output. Do you fully understand the code generated? How can you tell that the generated code is correct?",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -402,7 +567,7 @@
     "text": "Exercise 6\nCreate a precipitation plot that looks like the following. Note that\n\nThe triangles point to precipitation records–refer to the data codebook above for the RecordP variable.\nThe numbers on the plot indicate the total precipitation for the month–search the hjust and vjust options to adjust the alignment of the numbers.\nThe blue and tan colors hex codes are \"#32a3d8\" and \"#ebeae2\", respectively.\n\n\n\nSFO Precipitation in 2011\n\n\nCodemonth_labels &lt;- weather %&gt;%\n  group_by(Month) %&gt;%\n  filter(dateInYear == max(dateInYear))\n\nggplot(weather, aes(x = dateInYear, y = CulmPrec)) +\n  \n  # 1. Add the tan filled area, grouped by month to create the gaps\n  geom_area(aes(group = Month), fill = \"#ebeae2\") +\n  \n  # 2. Add the blue line on top of the area\n  geom_line(aes(group = Month), color = \"#32a3d8\") +\n  \n  # 3. Add the downward-pointing triangles for records\n  # We filter the data inline to only plot points where RecordP is TRUE\n  geom_point(data = filter(weather, RecordP == TRUE), \n             shape = 25,        # Shape 25 is a downward-pointing triangle\n             fill = \"black\", \n             size = 2) +\n  \n  # 4. Add the total precipitation numbers\n  # Using the subset we created earlier so we don't plot text on every single day\n  geom_text(data = month_labels, \n            aes(label = CulmPrec),\n            vjust = -0.5,          # Moves text slightly above the line\n            hjust = 0.5,           # Centers the text horizontally\n            size = 3.5) +\n  \n  # 5. Apply a clean theme to remove gridlines and match the image\n  theme_classic() +\n  labs(x = \"dateInYear\", y = \"CulmPrec\")\n\n\n\n\n\n\n\nBreaking Down Prompt and Output from Gemini - Prompt : “Can you guide me and complete the code in R, to recreate this plot with these instructions: - The triangles point to precipitation records–refer to the data codebook above for the RecordP variable. - The numbers on the plot indicate the total precipitation for the month–search the hjust and vjust options to adjust the alignment of the numbers. - The blue and tan colors hex codes are \"#32a3d8\" and \"#ebeae2\", respectively. using ggplot2 library” - Output : geom_area is new for me, but I understsand as it creates a density plot looking graph where it fills in the space in between the line and the x axis with the fill parameter. Furthermore, geom_text is new for me, but it seems intuitive enough as in being able to adjust the position of it. Gemini also data wrangled the data before hand, so that only the lastest of every every month row is available in a subset dataframe. Overall understandable, but if I was to do this myself would take some time working through documentations and trial/error with the parameters.",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -413,7 +578,7 @@
     "text": "Done!\n\nCheck the ICA Instructions for how to (a) push your code to GitHub and (b) update your portfolio website",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -424,7 +589,7 @@
     "text": "The exercise in this lesson are inspired by an assignment from the Concepts in Computing with Data course at UC Berkeley taught by Dr. Deborah Nolan.↩︎",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>3 Adv Data Viz</span>"
     ]
   },
   {
@@ -435,7 +600,7 @@
     "text": "🧩 Learning Goals\nBy the end of this lesson, you should be able to:",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
     ]
   },
   {
@@ -446,7 +611,7 @@
     "text": "Understand the basics of a CRS (coordinate reference system)\nUnderstand and recognize different spatial file types and data types in R\nImplement some of the basic plotting with the sf package\nUnderstand foundation ideas in working with spatial data (aggregating spatial point data to a spatial region, joining spatial data sets)",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
     ]
   },
   {
@@ -457,7 +622,7 @@
     "text": "Setup\nFor this activity, create the following directory structure in your portfolio repository under ica folder:\nportfolio\n └─ ica\n    └─ 04_adv_maps\n       ├─ code\n       │  └─ 04-adv-maps-1-notes.qmd ← the downloaded ICA Template\n       ├─ data\n       │  └─ ...  ← saving data here during this activity\n       └─ figures\n          └─ ...  ← saving created maps here during this activity\nFirst load required packages.\n\nCode#Install these packages first if you have not done already\n# install.packages(c(\"sf\",\"elevatr\",\"terra\",\"stars\",\"tidycensus\"))\n# install.packages('devtools')\n# devtools::install_github(\"ropensci/USAboundaries\")\n# install.packages(\"USAboundariesData\", repos = \"https://ropensci.r-universe.dev\", type = \"source\")\n\n\nlibrary(tidyverse)\nlibrary(sf) # tools for working with spatial vector data (GIS functionality, mapping)\nlibrary(elevatr) # access to raster elevation maps\nlibrary(terra)\nlibrary(stars)\nlibrary(tidycensus) # spatial data for the US with census information\nlibrary(USAboundaries) # access to boundaries for US states, counties, zip codes, and congressional districts",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
     ]
   },
   {
@@ -468,7 +633,7 @@
     "text": "Spatial Data in R\nSee Spatial Data Appendix for basics of CRS and spatial data types.\nDownload Shapefiles\n\nNavigate to the following URLs to download the spatial data files we’ll be using in this activity. Put these files in the data folder of your 04_adv_maps folder.\n\nMN cities\n\nNavigate to https://gis.data.mn.gov/\n\nSearch for City and Township Population Centers, Minnesota -&gt; click the first suggested result\nUnder the Layers section, click City And Township Population Centers -&gt; a side menu will open -&gt; locate the Shapefile entry -&gt; click Download -&gt; a file named City_And_Township_Population_Centers.zip will be downloaded\nMove the downloaded file to the data folder then unzip it and keep all the files\n\nMN water\n\nNavigate to https://gis.data.mn.gov/\n\nSearch for Lakes and Rivers -&gt; click the first suggested result\nOn the result page, locate the Shapefile entry -&gt; click Download -&gt; a file named Lakes_and_Rivers.zip will be downloaded\nMove the downloaded file to the data folder then unzip it and keep all the files\nRead in Files\n\nRead in the MN cities and MN water shapefiles by entering the correct relative paths in st_read(). Tab completion will be very helpful here: type part of a directory or file name and hit tab to autocomplete or bring up a dropdown of options.\n\n\n\nCode# Example: the sf package comes with a North Carolina shapefile.  So, we can read it as follows\nnc &lt;- st_read(system.file(\"shape/nc.shp\", package = \"sf\"))\n\nReading layer `nc' from data source \n  `/Users/ikimhor/Library/R/arm64/4.6/library/sf/shape/nc.shp' \n  using driver `ESRI Shapefile'\nSimple feature collection with 100 features and 14 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965\nGeodetic CRS:  NAD27\n\nCode# Read in shapefiles you just downloaded by updating the two lines below\nmn_cities &lt;- st_read('/Users/ikimhor/Library/CloudStorage/GoogleDrive-ikimhor@macalester.edu/My Drive/Class Files/Fall 2026/Intermediate Data Science/ds212-portfolio-ikimhor/ica/04_adv_maps/data/City_And_Township_Population_Centers/City_And_Township_Population_Centers.shp')\n\nReading layer `City_And_Township_Population_Centers' from data source \n  `/Users/ikimhor/Library/CloudStorage/GoogleDrive-ikimhor@macalester.edu/My Drive/Class Files/Fall 2026/Intermediate Data Science/ds212-portfolio-ikimhor/ica/04_adv_maps/data/City_And_Township_Population_Centers/City_And_Township_Population_Centers.shp' \n  using driver `ESRI Shapefile'\nSimple feature collection with 1081 features and 9 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 190832.6 ymin: 4816672 xmax: 747463.4 ymax: 5468045\nProjected CRS: NAD83 / UTM zone 15N\n\nCodemn_water &lt;- st_read('/Users/ikimhor/Library/CloudStorage/GoogleDrive-ikimhor@macalester.edu/My Drive/Class Files/Fall 2026/Intermediate Data Science/ds212-portfolio-ikimhor/ica/04_adv_maps/data/Lakes_and_Rivers/Lakes_and_Rivers.shp')\n\nReading layer `Lakes_and_Rivers' from data source \n  `/Users/ikimhor/Library/CloudStorage/GoogleDrive-ikimhor@macalester.edu/My Drive/Class Files/Fall 2026/Intermediate Data Science/ds212-portfolio-ikimhor/ica/04_adv_maps/data/Lakes_and_Rivers/Lakes_and_Rivers.shp' \n  using driver `ESRI Shapefile'\nSimple feature collection with 2311 features and 9 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 419538.6 ymin: 4922700 xmax: 522665 ymax: 5029945\nProjected CRS: NAD83 / UTM zone 15N\n\n\nThe sf package reads in spatial data in data.frame-like format. Using the class() function we can check the class (type) of object that we just read in. Note the presence of the “sf” and “data.frame” classes:\n\nCodeclass(nc)\n\n[1] \"sf\"         \"data.frame\"\n\nCode# check the class of your shapefiles below\nclass(mn_cities)\n\n[1] \"sf\"         \"data.frame\"\n\nCodeclass(mn_water)\n\n[1] \"sf\"         \"data.frame\"\n\n\nWhen we read in spatial objects, it is useful to check what CRS underlies the data. We can do that with st_crs() from the sf package:\n\nCodest_crs(nc)\n\nCoordinate Reference System:\n  User input: NAD27 \n  wkt:\nGEOGCRS[\"NAD27\",\n    DATUM[\"North American Datum 1927\",\n        ELLIPSOID[\"Clarke 1866\",6378206.4,294.978698213898,\n            LENGTHUNIT[\"metre\",1]]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"latitude\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"longitude\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    ID[\"EPSG\",4267]]\n\nCode# check the CRS of your shapefiles below\n\nst_crs(mn_cities)\n\nCoordinate Reference System:\n  User input: NAD83 / UTM zone 15N \n  wkt:\nPROJCRS[\"NAD83 / UTM zone 15N\",\n    BASEGEOGCRS[\"NAD83\",\n        DATUM[\"North American Datum 1983\",\n            ELLIPSOID[\"GRS 1980\",6378137,298.257222101,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4269]],\n    CONVERSION[\"UTM zone 15N\",\n        METHOD[\"Transverse Mercator\",\n            ID[\"EPSG\",9807]],\n        PARAMETER[\"Latitude of natural origin\",0,\n            ANGLEUNIT[\"Degree\",0.0174532925199433],\n            ID[\"EPSG\",8801]],\n        PARAMETER[\"Longitude of natural origin\",-93,\n            ANGLEUNIT[\"Degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"Scale factor at natural origin\",0.9996,\n            SCALEUNIT[\"unity\",1],\n            ID[\"EPSG\",8805]],\n        PARAMETER[\"False easting\",500000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"(E)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1]],\n        AXIS[\"(N)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1]],\n    ID[\"EPSG\",26915]]\n\nCodest_crs(mn_water)\n\nCoordinate Reference System:\n  User input: NAD83 / UTM zone 15N \n  wkt:\nPROJCRS[\"NAD83 / UTM zone 15N\",\n    BASEGEOGCRS[\"NAD83\",\n        DATUM[\"North American Datum 1983\",\n            ELLIPSOID[\"GRS 1980\",6378137,298.257222101,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4269]],\n    CONVERSION[\"UTM zone 15N\",\n        METHOD[\"Transverse Mercator\",\n            ID[\"EPSG\",9807]],\n        PARAMETER[\"Latitude of natural origin\",0,\n            ANGLEUNIT[\"Degree\",0.0174532925199433],\n            ID[\"EPSG\",8801]],\n        PARAMETER[\"Longitude of natural origin\",-93,\n            ANGLEUNIT[\"Degree\",0.0174532925199433],\n            ID[\"EPSG\",8802]],\n        PARAMETER[\"Scale factor at natural origin\",0.9996,\n            SCALEUNIT[\"unity\",1],\n            ID[\"EPSG\",8805]],\n        PARAMETER[\"False easting\",500000,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8806]],\n        PARAMETER[\"False northing\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8807]]],\n    CS[Cartesian,2],\n        AXIS[\"(E)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1]],\n        AXIS[\"(N)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1]],\n    ID[\"EPSG\",26915]]\n\n\nWe can treat sf objects similarly to ordinary datasets when using ggplot2 to make spatial visualizations:\n\nCodeggplot(nc) +\n    geom_sf()\n\n\n\n\n\n\nCode# visualize your shape files below\nggplot(mn_cities) +\n    geom_sf()\n\n\n\n\n\n\nCodeggplot(mn_water) +\n    geom_sf()\n\n\n\n\n\n\n\nChange CRS\n\nLet’s explore how changing the CRS changes the map. The st_transform() function in sf re-expresses a spatial object using a user-supplied CRS. The crs argument takes a string descriptor of the CRS. We can find these descriptors via https://epsg.io. In the example below, I searched for “South Carolina”.\n\n\nCodenc_transformed &lt;- nc |&gt; st_transform(crs = \"EPSG:32133\")\nst_crs(nc_transformed)\n\nCoordinate Reference System:\n  User input: EPSG:32133 \n  wkt:\nPROJCRS[\"NAD83 / South Carolina\",\n    BASEGEOGCRS[\"NAD83\",\n        DATUM[\"North American Datum 1983\",\n            ELLIPSOID[\"GRS 1980\",6378137,298.257222101,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4269]],\n    CONVERSION[\"SPCS83 South Carolina zone (meter)\",\n        METHOD[\"Lambert Conic Conformal (2SP)\",\n            ID[\"EPSG\",9802]],\n        PARAMETER[\"Latitude of false origin\",31.8333333333333,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8821]],\n        PARAMETER[\"Longitude of false origin\",-81,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8822]],\n        PARAMETER[\"Latitude of 1st standard parallel\",34.8333333333333,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8823]],\n        PARAMETER[\"Latitude of 2nd standard parallel\",32.5,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8824]],\n        PARAMETER[\"Easting at false origin\",609600,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8826]],\n        PARAMETER[\"Northing at false origin\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8827]]],\n    CS[Cartesian,2],\n        AXIS[\"easting (X)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1]],\n        AXIS[\"northing (Y)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1]],\n    USAGE[\n        SCOPE[\"Engineering survey, topographic mapping.\"],\n        AREA[\"United States (USA) - South Carolina - counties of Abbeville; Aiken; Allendale; Anderson; Bamberg; Barnwell; Beaufort; Berkeley; Calhoun; Charleston; Cherokee; Chester; Chesterfield; Clarendon; Colleton; Darlington; Dillon; Dorchester; Edgefield; Fairfield; Florence; Georgetown; Greenville; Greenwood; Hampton; Horry; Jasper; Kershaw; Lancaster; Laurens; Lee; Lexington; Marion; Marlboro; McCormick; Newberry; Oconee; Orangeburg; Pickens; Richland; Saluda; Spartanburg; Sumter; Union; Williamsburg; York.\"],\n        BBOX[32.05,-83.36,35.21,-78.52]],\n    ID[\"EPSG\",32133]]\n\nCodeggplot(nc_transformed) +\n    geom_sf() +\n    theme_classic()\n\n\n\n\n\n\n\nChallenge: Use https://epsg.io to find two CRSs that result in a North Carolina map that is noticeably different from the original in the NAD27 CRS. Below is a function that re-map a spatial object using a new CRS. Use it after modifying it as follows:\n\nRead through it to get a sense for how this code works.\n\nspatial_obj and new_crs are called arguments (function inputs). Add one more argument called title to this function. Use this input to set the plot title.\nUse the function to make two new maps using your chosen CRSs.\n\n\nCode# modify the function as mentioned above\ntransform_and_plot &lt;- function(spatial_obj, new_crs) {\n    spatial_obj |&gt; \n        st_transform(crs = new_crs) |&gt; \n        ggplot() +\n            geom_sf()\n}\n\n# Example usage of this function (using a South Carolina CRS)\n# Modify the call when you modify the function above\ntransform_and_plot(nc, new_crs = \"EPSG:32133\")\n\n\n\n\n\n\nCode# Write your answer to the challenge below\ntransform_and_plot(nc, new_crs = \"EPSG:5726\")\n\n\n\n\n\n\nCodetransform_and_plot(nc, new_crs = \"ESRI:37203\")\n\n\n\n\n\n\n\nVerify your understanding: If you had point location data that was not in NAD27 CRS, what would you expect about the accuracy of how they would be overlaid on the original North Carolina map?\n\nThe graph seemed to be flipped",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
     ]
   },
   {
@@ -479,7 +644,7 @@
     "text": "MN Map with Multiple Layers\nGoal: create a map of MN with different layers of information (city point locations, county polygon boundaries, rivers as lines and polygons, and a raster elevation map).\nGet County Boundaries\n\nWe’ve already read in city location and water information from external shapefiles. We can access county boundaries with the us_counties() function in the USAboundaries package.\n\n\nCode# Load country boundaries data as sf object\nmn_counties &lt;- USAboundaries::us_counties(resolution = \"high\", states = \"Minnesota\")\n\n\nUnifying CRSs Across Different Spatial Datasets\n\nWe first need to ensure that the CRS is the same for all spatial datasets.\n\n\nCheck the CRS for the mn_cities, mn_water, and mn_counties datasets.\nIf the datasets don’t all have the same CRS, use st_transform() to update the datasets to have the same CRS as mn_cities. You can use crs = st_crs(mn_cities) within st_transform().\n\n\nCode# Check the CRSs below\nst_crs(mn_counties)\n\nCoordinate Reference System:\n  User input: EPSG:4326 \n  wkt:\nGEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic System 1984 (Transit)\"],\n        MEMBER[\"World Geodetic System 1984 (G730)\"],\n        MEMBER[\"World Geodetic System 1984 (G873)\"],\n        MEMBER[\"World Geodetic System 1984 (G1150)\"],\n        MEMBER[\"World Geodetic System 1984 (G1674)\"],\n        MEMBER[\"World Geodetic System 1984 (G1762)\"],\n        MEMBER[\"World Geodetic System 1984 (G2139)\"],\n        MEMBER[\"World Geodetic System 1984 (G2296)\"],\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]],\n        ENSEMBLEACCURACY[2.0]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    USAGE[\n        SCOPE[\"Horizontal component of 3D system.\"],\n        AREA[\"World.\"],\n        BBOX[-90,-180,90,180]],\n    ID[\"EPSG\",4326]]\n\nCode# Update the datasets to have the same CRS\ntransform_and_plot(mn_counties, new_crs = \"EPSG:5726\")\n\n\n\n\n\n\n\nCounties + Cities\n\nCreate a map where city locations are overlaid on a map of county boundaries.\n\n\nYou will need to call geom_sf() twice.\nMake the map background white.\nInstall the ggthemes package, and add the following layer to use a clean map theme: + ggthemes::theme_map()\n\n\n\nCode# Write your answer here\nggplot (mn_counties) +\n  geom_sf (fill = \"white\") +\n  geom_sf(data = mn_cities, size = 0.5) +\n  ggthemes::theme_map()\n\n\n\n\n\n\n\nCustomize Colors\n\nWe can use traditional ggplot2 aesthetics (e.g., fill, color) to display location specific attributes. Below we only plot large cities, and we color and size cities according to their population.\n\n\nCodeggplot() +\n    geom_sf(data = mn_counties, fill = \"white\") + \n    geom_sf(data = mn_cities |&gt; filter(population &gt;= 10000), mapping = aes(color = population, size = population)) + # cities layer\n    scale_color_viridis_c() + # continuous (gradient) color scale\n    labs(title = \"Minnesota Cities with Population &gt;= 10,000\") + \n    ggthemes::theme_map() +\n    theme(legend.position = \"bottom\") # move legend\n\n\n\n\n\n\n\nLook up the scale_color_viridis_c() documentation via the ggplot2 reference.\n\nRead the function description at the top. What is the advantage of using this function for making color palettes?\nLook through the examples section. What is the difference between the _d(), _c(), and _b() variants of this function?\nAdding Elevation Raster Data\nWhere are large cities located? Is there some relationship to local geography/terrain?\n\nTo investigate these questions, we can obtain elevation data to include on the map using the elevatr package. We encounter two new functions here—we can look up their documentation to make sense of the code by entering the following in the Console:\n\n\n?elevatr::get_elev_raster\n?terra::as.data.frame\n\n\nCodeelevation &lt;- elevatr::get_elev_raster(mn_counties, z = 5, clip = \"bbox\")\nraster::crs(elevation) &lt;- sf::st_crs(mn_counties)\n\n# Convert to data frame for plotting\nelev_df &lt;- elevation |&gt; terra::as.data.frame(xy = TRUE)\ncolnames(elev_df) &lt;- c(\"x\", \"y\", \"elevation\")\n\n\nBuild on our existing map by adding a raster layer for elevation as the background.\n\nLook up the documentation for geom_raster() to plot the elevation data from elev_df. This will be the first layer of the plot.\nLook at the documentation for scale_fill_gradient() to add the following elevation color scale: \"darkgreen\" represents the lowest elevations, and \"white\" represents the highest elevations.\nAdd in the layers from the map above to show the largest cities and the county outlines. To remove a background color, use fill = NA.\n\n\nCodeggplot (mn_counties) +\n  geom_raster (data = elev_df, aes (x = x, y = y, fill = elevation)) +\n  scale_fill_gradient (low = \"darkgreen\", high = \"white\") + \n  geom_sf(data = mn_counties, color = \"black\", fill = NA) + \n  geom_sf(data = mn_cities, size = 0.5) +\n  geom_sf(data = mn_cities |&gt; filter(population &gt;= 10000), mapping = aes(color = population, size = population)) +\n  ggthemes::theme_map()\n\n\n\n\n\n\n\nZoom in to Twin Cities and Add Water\n\nThe bulk of the interesting information in this map is in the Twin Cities area. Let’s zoom in to this area.\n\n\nWe can use the st_bbox() function to get the bounding box for a spatial object—we do this after filtering to the 7 counties in the Twin Cities.\nWe then use st_crop() to trim a spatial object to a given bounding box.\n\n\nCodeseven_countyarea &lt;- mn_counties |&gt;\n    filter(name %in% c(\"Anoka\", \"Hennepin\", \"Ramsey\", \"Dakota\", \"Carver\", \"Washington\", \"Scott\")) |&gt; \n    st_bbox()\nseven_countyarea\n\n     xmin      ymin      xmax      ymax \n-94.01250  44.47115 -92.73204  45.41480 \n\nCode# Added st_cast(\"MULTIPOLYGON\") to fix the generic geometry error\nelevation &lt;- elevatr::get_elev_raster(\n    mn_counties |&gt; st_crop(seven_countyarea) |&gt; st_cast(\"MULTIPOLYGON\"), \n    z = 9, \n    clip = \"bbox\")\nraster::crs(elevation) &lt;- sf::st_crs(mn_counties)\n\n# Convert to data frame for plotting\nelev_df &lt;- elevation |&gt; terra::as.data.frame(xy = TRUE)\ncolnames(elev_df) &lt;- c(\"x\", \"y\", \"elevation\")\n\n\nIn the plot below, we add a layer for water information and a coord_sf() layer to restrict the x and y-axis limits to the Twin Cities bounding box. (Without this layer, the map would zoom back out to show all counties and bodies of water).\n\nCodeggplot() +\n    geom_raster(data = elev_df, aes(x = x, y = y, fill = elevation)) + \n    geom_sf(data = mn_counties, fill = NA, color = \"black\") + # county boundary layer\n    geom_sf(data = mn_water, fill = \"lightsteelblue1\", color = \"lightsteelblue1\") + # NEW: river/lake layer\n    geom_sf(data = mn_cities |&gt; filter(population &gt;= 10000), mapping = aes(color = population, size = population)) + # cities layer\n    scale_color_viridis_c(option = \"magma\") + # continuous (gradient) color scale\n    scale_fill_gradient(low = \"darkgreen\", high = \"white\") + # continuous (gradient) fill scale\n    coord_sf(xlim = seven_countyarea[c(\"xmin\", \"xmax\")], ylim = seven_countyarea[c(\"ymin\", \"ymax\")]) + # NEW: crop map to Twin Cities bounding box\n    labs(title = \"Twin Cities with Population &gt;= 10,000\") + \n    ggthemes::theme_map() +\n    theme(legend.position = \"none\") # remove legend\n\n\n\n\n\n\n\nLet’s add to the above code chunk to save the map above to an image file called tc_map_zoom.png in the figures folder. The code example below shows a general template for saving a plot to file. Choose a reasonable width and height.\n\nCode# Code for creating plot\n\nggsave('/Users/ikimhor/Library/CloudStorage/GoogleDrive-ikimhor@macalester.edu/My Drive/Class Files/Fall 2026/Intermediate Data Science/ds212-portfolio-ikimhor/ica/04_adv_maps/figures/Twin_Cities_WithPop10000.jpg', width = 400, height = 550, units = \"px\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
     ]
   },
   {
@@ -490,7 +655,7 @@
     "text": "Going Beyond - Twin Cities Map with leaflet\n\nBelow we show how to make the MN counties map in the leaflet package.\n\nCodelibrary(leaflet)\n\nmn_counties_leaf &lt;- mn_counties |&gt; st_transform(4326) \nmn_cities_leaf &lt;- mn_cities |&gt; st_transform(4326)\n\ncities_per_county &lt;- st_join(mn_cities_leaf, mn_counties_leaf) |&gt;\n    st_drop_geometry() |&gt; \n    count(name.y) |&gt;                  \n    rename(name = name.y)\n\nmn_counties_leaf |&gt; \n    filter(name %in% c(\"Anoka\", \"Hennepin\", \"Ramsey\", \"Dakota\", \"Carver\", \"Washington\", \"Scott\")) |&gt;\n    left_join(cities_per_county, by = \"name\") |&gt;  # explicitly join by the 'name' column\n    leaflet() |&gt; \n    addProviderTiles(\"OpenStreetMap.Mapnik\") |&gt; \n    addPolygons(\n        color = \"#444444\", \n        weight = 1, \n        smoothFactor = 0.5, \n        opacity = 1.0,\n        fillOpacity = 0.5, \n        fillColor = \"yellow\",\n        highlightOptions = highlightOptions(color = \"white\", weight = 2, bringToFront = TRUE)\n    ) |&gt;\n    addCircles(\n        data = mn_cities_leaf |&gt; filter(county %in% paste(c(\"Anoka\", \"Hennepin\", \"Ramsey\", \"Dakota\", \"Carver\", \"Washington\", \"Scott\"), \"County\")), \n        color = \"#444444\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
     ]
   },
   {
@@ -501,7 +666,7 @@
     "text": "Done!\n\nCheck the ICA Instructions for how to (a) push your code to GitHub and (b) update your portfolio website",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>4 Adv Spatial Viz</span>"
     ]
   },
   {
@@ -512,7 +677,7 @@
     "text": "Add content here",
     "crumbs": [
       "Extras",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Extra Sample 1</span>"
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Extra Sample 1</span>"
     ]
   },
   {
@@ -523,7 +688,7 @@
     "text": "Add content here",
     "crumbs": [
       "Extras",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extra Sample 2</span>"
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Extra Sample 2</span>"
     ]
   }
 ]
