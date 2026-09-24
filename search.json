@@ -256,7 +256,7 @@
     "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#setup",
     "title": "HW02-P1 Adv Data Viz",
     "section": "Setup",
-    "text": "Setup\n\nCodelibrary(tidyverse)\nweather &lt;- read_csv(\"https://mac-stat.github.io/data/sfo_weather.csv\")",
+    "text": "Setup\n\nCodelibrary(tidyverse)\nlibrary (patchwork)\nweather &lt;- read_csv(\"https://mac-stat.github.io/data/sfo_weather.csv\")",
     "crumbs": [
       "TidyTuesday",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW02-P1 Adv Data Viz</span>"
@@ -274,11 +274,22 @@
     ]
   },
   {
+    "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#connecting-the-plots",
+    "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#connecting-the-plots",
+    "title": "HW02-P1 Adv Data Viz",
+    "section": "Connecting the plots",
+    "text": "Connecting the plots\n\nCodep1 &lt;- ggplot(weather) + \n  geom_linerange(aes(x = date, ymin = RecordLow, ymax = RecordHigh), color = '#ECEBE3') +\n  geom_linerange(aes(x = date, ymin = NormalLow, ymax = NormalHigh), color = '#C8B8BA') +\n  geom_linerange(aes(x = date, ymin = Low, ymax = High), color = '#A90248') + \n  geom_vline(\n    data = subset(weather, Day == 1), \n    aes(xintercept = as.numeric(date)),\n    linetype = \"dotted\", \n    color = \"grey\") + \n  scale_x_date(\n    breaks = subset(weather, Day == 15)$date, \n    labels = month.abb) +\n  theme_classic() +\n  theme(axis.title.x = element_blank()) + \n  labs (y = \"Temperature\")\n\nmonth_labels &lt;- weather %&gt;%\n  group_by(Month) %&gt;%\n  filter(dateInYear == max(dateInYear))\n\np2 &lt;- ggplot(weather, aes(x = dateInYear, y = CulmPrec)) +\n  geom_area(aes(group = Month), fill = \"#ebeae2\") +\n  geom_line(aes(group = Month), color = \"#32a3d8\") +\n  geom_point(data = filter(weather, RecordP == TRUE), \n             shape = 25,\n             fill = \"black\", \n             size = 2) +\n  geom_text(data = month_labels, \n            aes(label = CulmPrec),\n            vjust = -0.5,\n            hjust = 0.5,\n            size = 3.5) +\n  theme_classic() +\n  labs(x = \"Month\", y = \"Precipitation\")\n\nfinal_plot &lt;- (p1 / p2) + \n  plot_layout(heights = c(3, 1)) +\n  plot_annotation(\n    title = 'SFO Weather in 2011',\n    theme = theme(plot.title = element_text(hjust = 0.5, size = 20))\n  )\n\nfinal_plot",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW02-P1 Adv Data Viz</span>"
+    ]
+  },
+  {
     "objectID": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#resources-reflection-required",
     "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p1.html#resources-reflection-required",
     "title": "HW02-P1 Adv Data Viz",
     "section": "Resources Reflection (required)",
-    "text": "Resources Reflection (required)\nList the resources you used to help with this assignment then write 3-5 sentence reflection on which resources were most helpful in finishing this task.\nResources:\n\nI used the previous completed “Adv Viz” codes and simply clean it up.\nhttps://rstudio.github.io/cheatsheets/data-visualization.pdf for scale syntax\n\nReflection:\n\nThis was an enjoyable plot to make",
+    "text": "Resources Reflection (required)\nList the resources you used to help with this assignment then write 3-5 sentence reflection on which resources were most helpful in finishing this task.\nResources:\n\nI used the previous completed “Adv Viz” codes and simply clean it up.\nhttps://rstudio.github.io/cheatsheets/data-visualization.pdf for scale syntax\nGoogle: How to use patchwork library in R\n\nReflection:\n\nThis was an enjoyable plot to make, however I had to google how to connect the two plots together. This led me to patchwork which is simply a new library I am able to use now. Enriching exercise.",
     "crumbs": [
       "TidyTuesday",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>HW02-P1 Adv Data Viz</span>"
@@ -388,7 +399,7 @@
     "href": "hw/ds212-hw-ikimhor/hw02/src/hw02-p2.html#resources-reflection-required",
     "title": "HW02-P2 Adv Data Viz",
     "section": "Resources Reflection (required)",
-    "text": "Resources Reflection (required)\nList the resources you used to help with this assignment then write 3-5 sentence reflection on which resources were most helpful in finishing this task.\nResources:\n\nhttps://ggplot2.tidyverse.org/reference/geom_segment.html\nhttps://ggplot2.tidyverse.org/reference/geom_segment.html\nGoogle AI overview for: data.frame syntax, removing axis labels, left align texts from labs, how to add geom_text and how to use geom_text, adding annotations for the years\n\nReflection:\n\nThis took way too long to do. It is enriching however, I learnt new syntax, ways to manually manipulate different aspects of the graph that before I would simply settled for the default. Furthermore, I believe I am learning to break down graphs more easily, dividing the core aesthetic up makes writing code more digestible.",
+    "text": "Resources Reflection (required)\nList the resources you used to help with this assignment then write 3-5 sentence reflection on which resources were most helpful in finishing this task.\nResources:\n\nhttps://ggplot2.tidyverse.org/reference/geom_segment.html\nhttps://ggplot2.tidyverse.org/reference/Scale.html\nhttps://r-graph-gallery.com/package/ggtext.html\nhttps://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf\nGoogle AI overview for: data.frame syntax, removing axis labels, left align texts from labs, how to add geom_text and how to use geom_text, adding annotations for the years\n\nReflection:\n\nThis took way too long to do. It is enriching however, I learnt new syntax, ways to manually manipulate different aspects of the graph that before I would simply settled for the default. Furthermore, I believe I am learning to break down graphs more easily, dividing the core aesthetic up makes writing code more digestible.",
     "crumbs": [
       "TidyTuesday",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>HW02-P2 Adv Data Viz</span>"
