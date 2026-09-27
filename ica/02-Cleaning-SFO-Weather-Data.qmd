@@ -35,7 +35,7 @@ Step 1
 ```{r}
 library (tidyverse)
 
-weather <- read.csv('ica/data/raw/weather.csv')
+weather <- read.csv('data/raw/weather.csv')
 ```
 
 Step 2
@@ -60,5 +60,5 @@ weather_clean <- weather_clean %>%
 
 Step 5
 ``` {r}
-write_csv(weather_clean, file = "ica/data/processed/weather_clean.csv")
+write_csv(weather_clean, file = "data/processed/weather_clean.csv")
 ```
