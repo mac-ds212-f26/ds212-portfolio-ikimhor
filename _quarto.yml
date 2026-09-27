@@ -70,6 +70,8 @@ book:
       - hw/ds212-hw-ikimhor/hw00/src/hw00-p2.qmd
       - hw/ds212-hw-ikimhor/hw02/src/hw02-p1.qmd
       - hw/ds212-hw-ikimhor/hw02/src/hw02-p2.qmd
+      - hw/ds212-hw-ikimhor/hw03/src/hw03-p1.qmd
+      - hw/ds212-hw-ikimhor/hw03/src/hw03-p2.qmd
 
     - part: "Pre-Class Learnings"
       chapters:
