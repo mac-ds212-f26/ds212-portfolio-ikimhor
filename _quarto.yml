@@ -64,15 +64,6 @@ book:
       chapters:
       - pvj/pvj-01.qmd
 
-    - part: "TidyTuesday"
-      chapters:
-      - hw/ds212-hw-ikimhor/hw00/src/hw00-p2-redundant.qmd
-      - hw/ds212-hw-ikimhor/hw00/src/hw00-p2.qmd
-      - hw/ds212-hw-ikimhor/hw02/src/hw02-p1.qmd
-      - hw/ds212-hw-ikimhor/hw02/src/hw02-p2.qmd
-      - hw/ds212-hw-ikimhor/hw03/src/hw03-p1.qmd
-      - hw/ds212-hw-ikimhor/hw03/src/hw03-p2.qmd
-
     - part: "Pre-Class Learnings"
       chapters:
       - pcl/pcl.qmd
@@ -83,6 +74,13 @@ book:
       - ica/02-Cleaning-SFO-Weather-Data.qmd
       - ica/03-adv-ggplot-notes.qmd
       - ica/04_adv_maps/code/04-adv-maps-1-notes.qmd
+      - ica/06-wrangling-1-notes.qmd
+      - ica/07-wrangling-2.qmd
+      - ica/08-missing-data.qmd
+      - ica/09-functions.qmd
+      - ica/10-base-r.qmd
+      - ica/11-iteration-1.qmd
+      - ica/12-iteration-2.qmd
 
     - part: "Extras"
       chapters:

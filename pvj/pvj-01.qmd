@@ -2,4 +2,220 @@
 title: "Personal Visualization Journey"
 ---
 
-Add content here
+# Library Used
+```{r}
+library(FITfileR)
+library(tidyverse)
+library(purrr)
+library(dplyr)
+```
+
+# Data Import & Cleaning
+```{r}
+fit_files <- list.files('data/raw/personalVizJourney_Coros', pattern = "\\.fit$", full.names = TRUE)
+
+read_fit_records <- function(file_path) {
+  fit_data <- readFitFile(file_path)
+  
+  df <- records(fit_data)
+  
+  if (is.list(df) & !is.data.frame(df)) {
+    df <- bind_rows(df)}
+  
+  df <- df %>% mutate(source_file = basename(file_path))
+  
+  return(df)}
+
+combined_df <- fit_files %>%
+  map(read_fit_records) %>%
+  bind_rows()
+
+corosData <- combined_df
+
+print(corosData)
+```
+
+# Initial Viz
+```{r}
+corosData
+str (corosData)
+```
+
+> The data initially looks sparse, but if there's anything that I learned from working with data is that the simplest most mundane looking of numbers will always have underlying information and context that we can extract!
+
+> My research question or goals for now will be: How can I improve my athletic abilities overall!
+
+# Exploring Running Form
+## Optimizing Stride Length 1
+```{r}
+run_data <- corosData %>%
+  filter(activity_type == "running", !is.na(cadence), cadence > 50) %>%
+  filter(speed < 20) # this is to remove one single outlier where I was running for 60m/s???
+
+ggplot(run_data, aes(x = speed, y = cadence)) +
+  geom_point(alpha = 0.5, color = "hotpink") +
+  geom_smooth(method = "gam", color = "red") +
+  labs(
+    title = "Cadence Responsiveness to Speed", 
+    x = "Speed (m/s)", 
+    y = "Cadence (steps per minute)") +
+  theme_minimal()
+
+cor (run_data$speed, run_data$cadence) # this is to confirm how correlated my stride length is
+```
+
+> It looks like I might be overstriding in most of my runs, that's because in this plot I should be expecting a simple straight line, that means that my cadence is not changing regardless of how fast I am going, or slight upward but not this positive. Therefore, meaning the faster I am going to longer my legs are reaching ahead of me, meaning I am heel striking more, less efficiency of energy. 
+
+## Optimizing Stride Length 2
+```{r}
+ggplot(run_data, aes(x = speed, y = step_length)) +
+  geom_point(alpha = 0.5, color = "hotpink") +
+  geom_smooth(method = "gam", color = "red") +
+  labs(
+    title = "Step Length Expansion vs. Speed", 
+    x = "Speed (m/s)", 
+    y = "Step Length (mm)") +
+  theme_minimal()
+
+cor(run_data$speed, run_data$step_length, use = "complete.obs")
+```
+
+> Here I should be expecting less of a positive upward trend, but I do see that in which I just described indicating the opposite of a preferable running form. The correlation is very high in this which makes sense, since the faster I go the more step length I should be makign to compensate for the a cosntant candence, but there's so much outliers as well, meaning that my step length increases dramatically at higher speeds while my cadence stays flat, so I am likely reaching too far forward.
+
+## Optimizing Stride Length 3
+```{r}
+clean_corosData <- corosData %>%
+  filter(cadence > 40 & cadence < 120) # cleaning the data for any sensor artifacts
+
+single_run <- corosData %>%
+  filter(source_file == "453108319870025728.fit")
+
+ggplot(single_run, aes(x = distance, y = cadence)) +
+  geom_line(color = "hotpink", alpha = 0.5) +
+  geom_smooth(method = "loess", color = "black", span = 0.2) +
+  labs(
+    title = "Form Breakdown: Cadence Over Distance", 
+    x = "Distance (meters)", 
+    y = "Cadence (spm)") +
+  theme_minimal()
+```
+
+> I have used data for my 10KM run in which the black lines shows a consistent cadence (remarkably I must say) across the whole distance. It is hovering between 70 - 80 steps per minutes (spm) which mean my actual cadence is around 140 - 160 spm since the sensor on my watch only measures for one single foot.
+
+### Synthesis of Data
+> To put into perspective, my running form is quite bad since a cadence of 140 - 160 spm is on the lower end, with me being on the leaner and longer side of runners, meaning that I am generating my speed not through leg turnover, but through overstriding; reaching far too ahead, and "breaking" heel striking as an output.
+
+> Therefore next steps to understand how to improve my running form (finding the optimal form) is to analyze Vertical Oscillation vs. Speed, checking my stance time (ground contact time) then ultimately mappiung my Form to Physiological Cost. However I don't have any data on these measures, so then we will just skip it.
+
+## Map Form to Physiological Cost (The Efficiency Sweet Spot)
+```{r}
+efficiency_check <- run_data %>%
+  filter(speed >= 2.5 & speed <= 2.7) %>%
+  filter(heart_rate > 100)
+
+ggplot(efficiency_check, aes(x = cadence, y = heart_rate)) +
+  geom_point(alpha = 0.4, color = "hotpink") +
+  geom_smooth(method = "loess", color = "gold") +
+   labs(
+    title = "Heart Rate Cost at Cruising Pace (2.5 - 2.7 m/s)", 
+    x = "Cadence (spm)", 
+    y = "Heart Rate (bpm)") +
+  theme_minimal()
+```
+
+> The plot confirms the overstriding hypothesis. By taking longer, slower steps (75-80 spm), I am braking slightly with each foot strike, forcing my heart to work more to simply keep the momentum. However if I consciously shorten my stride and increase my cadence by just 5 to 8 steps per minute (aiming for that 84 spm dip), I would be able to run at the exact same speed but at a significantly lower, more sustainable heart rate.
+
+> Knowing that I could improve my running form and make better use of power efficiency, let's see the magnitude of this and how much I am able to save by improving my running form.
+
+# Forecasting the difference in current running form and optimal running form
+## Model Fitting and Plotting
+
+```{r}
+pace_model <- lm(speed ~ heart_rate + cadence, data = clean_corosData)
+
+scenarios <- data.frame(
+  form_profile = c("Current Stride (78 spm)", "Optimal Stride (84 spm)"),
+  heart_rate = c(165, 165), 
+  cadence = c(78, 84))
+
+performance_prediction <- scenarios %>%
+  mutate(
+    predicted_speed_ms = predict(pace_model, newdata = scenarios),
+    finish_time_minutes = (10000 / predicted_speed_ms) / 60)
+
+ggplot(performance_prediction, aes(x = form_profile, y = finish_time_minutes, fill = form_profile)) +
+  geom_col(width = 0.5, alpha = 0.8) +
+  geom_text(
+    aes(label = paste0(round(finish_time_minutes, 1), " min")), 
+    vjust = -0.8, 
+    fontface = "bold") +
+  scale_fill_manual(values = c("Current Stride (78 spm)" = "hotpink", "Optimal Stride (84 spm)" = "gold")) +
+  labs(
+    title = "Predicted 10K Performance at 165 bpm Constant Effort",
+    subtitle = "Comparing current overstriding vs. optimal 84 spm cadence",
+    x = "Biomechanical Form",
+    y = "Predicted 10K Finish Time (Minutes)") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+## Summary of the model
+```{r}
+summary (pace_model)
+```
+
+> The regression model mathematically proves that correcting my overstride will make me faster without requiring extra effort, explaining nearly 48% of the variance in my pacing (other var could be elevation gain, the temperature, baseline energy etc.,). Specifically, the data shows that for every additional step per minute I take, my speed increases by 0.046 meters per second while holding my heart rate constant. Conversely, the slightly negative heart rate coefficient captures cardiovascular drift, showing that as I fatigue, my heart works harder to maintain a slower pace. By shifting my cadence from 78 spm to the optimal 84 spm, I gain about 0.28 meters per second in "free speed" simply by eliminating the braking forces of my current stride.
+
+## Sanity Check - Running an ANOVA
+```{r}
+anova_data <- clean_corosData %>%
+  mutate(
+    cadence_group = case_when(
+      cadence >= 76 & cadence <= 80 ~ "Current Stride (78 zone)",
+      cadence >= 82 & cadence <= 86 ~ "Optimal Stride (84 zone)",
+      TRUE ~ NA_character_)) %>%
+  filter(!is.na(cadence_group))
+
+cadence_anova <- aov(speed ~ cadence_group, data = anova_data)
+
+summary(cadence_anova)
+```
+
+> Correcting my cadence will fix my running form, and 100% makes me significantly faster.
+
+# Predicting Running Time
+## Model Fitting and Prediction plots
+```{r}
+race_scenarios <- data.frame(
+  race = factor(
+    rep(c("5K", "10K", "Half Marathon", "Marathon"), each = 2),
+    levels = c("5K", "10K", "Half Marathon", "Marathon")),
+  distance_m = rep(c(5000, 10000, 21097.5, 42195), each = 2),
+  form_profile = rep(c("Current Stride (78 spm)", "Optimal Stride (84 spm)"), 4),
+  heart_rate = 165,
+  cadence = rep(c(78, 84), 4))
+
+race_predictions <- race_scenarios %>%
+  mutate(
+    predicted_speed_ms = predict(pace_model, newdata = .),
+    finish_time_minutes = (distance_m / predicted_speed_ms) / 60)
+
+ggplot(race_predictions, aes(x = race, y = finish_time_minutes, fill = form_profile)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  geom_text(
+    aes(label = paste0(round(finish_time_minutes, 1), "m")), 
+    position = position_dodge(width = 0.9), 
+    vjust = -0.5,
+    size = 3.5,
+    fontface = "bold") +
+  scale_fill_manual(
+    values = c("Current Stride (78 spm)" = "hotpink", "Optimal Stride (84 spm)" = "gold")) +
+  labs(
+    title = "Predicted Race Times: Current vs. Optimal Form",
+    subtitle = "Constant cardiovascular effort at 165 bpm",
+    x = "Race Distance",
+    y = "Finish Time (Minutes)",
+    fill = "Biomechanical Form") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```

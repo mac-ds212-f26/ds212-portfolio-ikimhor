@@ -77,6 +77,7 @@ Or you can create one based on available data using
 
 ```{r}
 library(tidyverse)
+library(forcats)
 ```
 
 ```{r create_vec_examples}
@@ -187,18 +188,18 @@ Here are few examples comparing `ifelse()` and `if_else()`:
 
 x <- c(-1, -2, 4, 9, NA)
 
-ifelse(x > 0, 'positive', 'negative')
-if_else(x > 0, 'positive', 'negative')
+# ifelse(x > 0, 'positive', 'negative')
+# if_else(x > 0, 'positive', 'negative')
 
 
-ifelse(x > 0, 1, 'negative') # Bad: doesn't complain with combo of data types
-if_else(x > 0, 1, 'negative') # Good:noisy to make sure you catch issues
+# ifelse(x > 0, 1, 'negative') # Bad: doesn't complain with combo of data types
+# if_else(x > 0, 1, 'negative') # Good:noisy to make sure you catch issues
 
-if_else(x > 0, 'positive', 'negative', missing = 'missing') # Good: can explicitly handle NA
+# if_else(x > 0, 'positive', 'negative', missing = 'missing') # Good: can explicitly handle NA
 
 fun_dates <- mdy('1-1-2025') + 0:365
-ifelse(fun_dates < today(), fun_dates + years(), fun_dates) # Bad: converts dates to integers
-if_else(fun_dates < today(), fun_dates + years(), fun_dates) # Good: keeps dates as dates
+# ifelse(fun_dates < today(), fun_dates + years(), fun_dates) # Bad: converts dates to integers
+# if_else(fun_dates < today(), fun_dates + years(), fun_dates) # Good: keeps dates as dates
 ```
 
 :::
@@ -387,7 +388,7 @@ Because the `NA` is introduced silently (without any error or warnings), this ca
 ```{r fct_forcats}
 #| error: true
 
-fct(months2, levels = month.abb)
+factor(months2, levels = month.abb)
 ```
 
 
